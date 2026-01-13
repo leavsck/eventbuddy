@@ -1,0 +1,44 @@
+/* styles/_tags.scss */
+
+/* keine Punkte in der Tagliste */
+.tag-list ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+/* Tag Cards (die du aktuell schon in forms drin hast) */
+.tag-items {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.tag-item {
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.tag-name {
+  font-weight: 700;
+}
+
+.tag-delete {
+  border: none;
+  border-radius: 10px;
+  padding: 8px 10px;
+  cursor: pointer;
+  background: var(--muted);
+  color: var(--fg);
+
+  &:hover {
+    filter: brightness(0.92);
+  }
+}

@@ -29,25 +29,33 @@
         <section id="filter-section">
             <h2>Filter</h2>
 
-            <label for="filter-status">Status:</label>
-            <select id="filter-status" name="status">
-                <option value="">Alle</option>
-                <option value="geplant">Geplant</option>
-                <option value="abgeschlossen">Abgeschlossen</option>
-            </select>
+            <div class="filter-dd" id="dd-status">
+                <button type="button" class="filter-dd__btn" aria-expanded="false">
+                    Status <span class="filter-dd__value" id="filter-status-value">Alle</span>
+                    <span class="filter-dd__chev">▾</span>
+                </button>
+                <div class="filter-dd__panel" id="filter-statuses"></div>
+            </div>
 
-            <label for="filter-participant">Teilnehmer:</label>
-            <select id="filter-participant" name="participant">
-                <option value="">Alle</option>
-            </select>
+            <div class="filter-dd" id="dd-participants">
+                <button type="button" class="filter-dd__btn" aria-expanded="false">
+                    Teilnehmer <span class="filter-dd__value" id="filter-participants-value">Alle</span>
+                    <span class="filter-dd__chev">▾</span>
+                </button>
+                <div class="filter-dd__panel" id="filter-participants"></div>
+            </div>
 
-            <label for="filter-tag">Tag:</label>
-            <select id="filter-tag" name="tag">
-                <option value="">Alle</option>
-            </select>
+            <div class="filter-dd" id="dd-tags">
+                <button type="button" class="filter-dd__btn" aria-expanded="false">
+                    Tags <span class="filter-dd__value" id="filter-tags-value">Alle</span>
+                    <span class="filter-dd__chev">▾</span>
+                </button>
+                <div class="filter-dd__panel" id="filter-tags"></div>
+            </div>
 
             <button id="btn-apply-filter">Filtern</button>
         </section>
+
 
         <!-- === Views (Web Components) === -->
         <section id="event-list-section">

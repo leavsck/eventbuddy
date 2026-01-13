@@ -547,13 +547,109 @@ body {
   margin-top: 10px;
 }
 
-/* ===== Teilnehmer Seite Styling ===== */
+/* Filter Dropdown + Checkboxen */
+.filter-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  user-select: none;
+}
+.filter-check input[type=checkbox] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--primary);
+}
+
+.filter-dd {
+  position: relative;
+  display: inline-block;
+}
+.filter-dd__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-width: 260px;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--bg-elev);
+  color: var(--fg);
+  cursor: pointer;
+  font-weight: 700;
+}
+.filter-dd__btn:hover {
+  filter: brightness(0.97);
+}
+.filter-dd__value {
+  font-weight: 600;
+  opacity: 0.75;
+}
+.filter-dd__chev {
+  opacity: 0.7;
+  margin-left: 6px;
+}
+.filter-dd__panel {
+  display: none;
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 50;
+  width: 340px;
+  max-height: 240px;
+  overflow: auto;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--bg-elev);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.35);
+}
+.filter-dd.is-open .filter-dd__btn {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.18);
+}
+.filter-dd.is-open .filter-dd__panel {
+  display: grid;
+  gap: 10px;
+}
+
+.filter-dd__panel-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.filter-link {
+  background: transparent;
+  border: 0;
+  color: var(--primary);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* styles/_participants.scss */
 .list-title {
   margin-top: 18px;
   margin-bottom: 10px;
   font-size: 16px;
   font-weight: 700;
   opacity: 0.85;
+}
+
+/* keine Punkte in der Teilnehmerliste */
+.participant-list ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.participant-list li::marker {
+  content: "";
 }
 
 .participant-item {
@@ -579,7 +675,26 @@ body {
   font-style: italic;
 }
 
-/* ===== Tags Liste ===== */
+/* bullets weg (Shadow DOM list) */
+.participant-items {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.participant-items li {
+  list-style: none;
+}
+
+/* styles/_tags.scss */
+/* keine Punkte in der Tagliste */
+.tag-list ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+/* Tag Cards (die du aktuell schon in forms drin hast) */
 .tag-items {
   list-style: none;
   padding: 0;

@@ -1,0 +1,49 @@
+/* styles/_participants.scss */
+
+.list-title {
+  margin-top: 18px;
+  margin-bottom: 10px;
+  font-size: 16px;
+  font-weight: 700;
+  opacity: 0.85;
+}
+
+/* keine Punkte in der Teilnehmerliste */
+.participant-items {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.participant-item {
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  color: inherit;
+}
+
+.participant-name {
+  font-weight: 700;
+}
+
+.participant-mail {
+  font-size: 13px;
+  opacity: 0.75;
+  margin-top: 4px;
+}
+
+.participant-empty {
+  opacity: 0.7;
+  font-style: italic;
+}
+
+/* Teilnehmer-Liste */
+.participant-items {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  display: grid;
+  gap: 10px; // ← DAS ist der Abstand zwischen den Boxen
+}

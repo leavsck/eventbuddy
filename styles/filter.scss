@@ -1,0 +1,97 @@
+/* Filter Dropdown + Checkboxen */
+
+.filter-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  user-select: none;
+
+  input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--primary);
+  }
+}
+
+.filter-dd {
+  position: relative;
+  display: inline-block;
+
+  &__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+
+    min-width: 260px;
+    padding: 10px 14px;
+
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--bg-elev);
+    color: var(--fg);
+
+    cursor: pointer;
+    font-weight: 700;
+
+    &:hover { filter: brightness(0.97); }
+  }
+
+  &__value {
+    font-weight: 600;
+    opacity: 0.75;
+  }
+
+  &__chev {
+    opacity: 0.7;
+    margin-left: 6px;
+  }
+
+  &__panel {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    z-index: 50;
+
+    width: 340px;
+    max-height: 240px;
+    overflow: auto;
+
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--bg-elev);
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.35);
+  }
+
+  &.is-open {
+    .filter-dd__btn {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.18);
+    }
+    .filter-dd__panel {
+      display: grid;
+      gap: 10px;
+    }
+  }
+}
+
+.filter-dd__panel-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.filter-link {
+  background: transparent;
+  border: 0;
+  color: var(--primary);
+  font-weight: 700;
+  cursor: pointer;
+}

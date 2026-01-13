@@ -9,6 +9,8 @@ import "./view/event-form.js";
 import "./view/tag-list.js";
 import "./view/participant-list.js";
 import "./view/event-detail.js";
+import "./view/filter.js";
+
 
 
 //Überprüfung ob es eh geladen wird
