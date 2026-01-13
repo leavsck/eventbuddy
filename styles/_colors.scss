@@ -4,7 +4,9 @@
   --fg: #111827;
   --muted: #cfd6e4;
   --border: #e5e7eb;
-  --primary: #10b981;
+
+  /* rosa für die buttons in der sidebar und filter :)) */
+  --primary: #ec4899;
   --accent: #3b82f6;
 }
 
@@ -15,7 +17,9 @@
     --fg: #e5e7eb;
     --muted: #2a3550;
     --border: #1f2937;
-    --primary: #34d399;
-    --accent: #60a5fa;
+
+    /* bissi helleres rosa für buttons in sidebar und filter */
+    --primary: #f472b6;
+    --accent: #60a5fa; /*das man halt sieht wenn man grade auf diesem button ist*/
   }
 }

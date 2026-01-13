@@ -90,13 +90,15 @@
 }
 
 .detail-card {
-  background: rgba(255, 255, 255, 0.96);
-  color: #111;
+  background: var(--bg-elev);
+  color: var(--fg);
+  border: 1px solid var(--border);
   border-radius: 10px;
   padding: 22px 26px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.20);
   max-width: 900px;
 }
+
 
 .detail-title {
   margin: 0 0 18px 0;
@@ -160,13 +162,15 @@
 }
 
 .chip {
+  background: var(--muted);
+  color: var(--fg);
   display: inline-flex;
   align-items: center;
   padding: 4px 10px;
   border-radius: 8px;
-  background: #eaeaea;
   font-size: 12px;
 }
+
 
 .detail-actions {
   display: flex;

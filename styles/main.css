@@ -1,10 +1,12 @@
+@charset "UTF-8";
 :root {
   --bg: #f5f7fb;
   --bg-elev: #ffffff;
   --fg: #111827;
   --muted: #cfd6e4;
   --border: #e5e7eb;
-  --primary: #10b981;
+  /* rosa für die buttons in der sidebar und filter :)) */
+  --primary: #ec4899;
   --accent: #3b82f6;
 }
 
@@ -15,8 +17,9 @@
     --fg: #e5e7eb;
     --muted: #2a3550;
     --border: #1f2937;
-    --primary: #34d399;
-    --accent: #60a5fa;
+    /* bissi helleres rosa für buttons in sidebar und filter */
+    --primary: #f472b6;
+    --accent: #60a5fa; /*das man halt sieht wenn man grade auf diesem button ist*/
   }
 }
 * {
@@ -276,8 +279,9 @@ body {
 }
 
 .detail-card {
-  background: rgba(255, 255, 255, 0.96);
-  color: #111;
+  background: var(--bg-elev);
+  color: var(--fg);
+  border: 1px solid var(--border);
   border-radius: 10px;
   padding: 22px 26px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
@@ -346,11 +350,12 @@ body {
 }
 
 .chip {
+  background: var(--muted);
+  color: var(--fg);
   display: inline-flex;
   align-items: center;
   padding: 4px 10px;
   border-radius: 8px;
-  background: #eaeaea;
   font-size: 12px;
 }
 
@@ -431,14 +436,13 @@ body {
   filter: brightness(0.95);
 }
 
-/* ===== Neues Form-Card Styling (Event erstellen + Teilnehmerseite nutzt das) ===== */
 .form-card {
-  background: rgba(255, 255, 255, 0.96);
-  color: #111;
+  background: var(--bg-elev);
+  color: var(--fg);
   border-radius: 10px;
   padding: 22px 26px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--border);
   max-width: 900px;
 }
 
@@ -474,11 +478,12 @@ body {
 .form-input,
 .form-select,
 .form-textarea {
-  border: 1px solid rgba(0, 0, 0, 0.12);
+  border: 1px solid var(--border);
   border-radius: 8px;
   padding: 10px 12px;
   font-size: 14px;
-  background: #fff;
+  background: var(--bg);
+  color: var(--fg);
   outline: none;
 }
 
@@ -516,8 +521,8 @@ body {
 }
 
 .btn-secondary {
-  background: #e5e7eb;
-  color: #111;
+  background: var(--muted);
+  color: var(--fg);
 }
 
 /* ===== Teilnehmer Seite Styling ===== */
