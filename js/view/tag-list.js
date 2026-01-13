@@ -18,31 +18,49 @@ class TagList extends HTMLElement {
 
     render() {
         this.shadowRoot.innerHTML = `
-        <link rel="stylesheet" href="./styles/main.css">
-        <section class="tag-list">
-          <h2>Tags verwalten</h2>
-          <form id="tag-form" class="form">
-            <label for="tag-name">Neuer Tag:</label>
-            <input id="tag-name" name="name" type="text" required placeholder="z. B. Workshop"/>
-            <button class="form__btn form__btn--primary" type="submit">Tag hinzufügen</button>
-          </form>
+      <link rel="stylesheet" href="./styles/main.css">
 
-          <ul class="tag-list__items"></ul>
-        </section>`;
+      <section class="form-card">
+        <div class="form-card__header">
+          <h2 class="form-card__title">Tags verwalten</h2>
+        </div>
 
-        const list = this.shadowRoot.querySelector(".tag-list__items");
+        <form id="tag-form" class="form-grid">
+          <div class="form-field">
+            <label class="form-label" for="tag-name">Neuer Tag</label>
+            <input
+              class="form-input"
+              id="tag-name"
+              name="name"
+              type="text"
+              required
+              placeholder="z. B. Workshop"
+            />
+          </div>
+
+          <div class="form-actions">
+            <button class="btn btn-primary" type="submit">Tag hinzufügen</button>
+          </div>
+        </form>
+
+        <h3 class="list-title">Bestehende Tags</h3>
+        <ul class="tag-items"></ul>
+      </section>
+    `;
+
+        const list = this.shadowRoot.querySelector(".tag-items");
         list.innerHTML = "";
 
-        // Tags aus dem Model laden
-        for (let tag of eventModel.tags) {
+        // Tags aus dem Model rendern
+        for (const tag of eventModel.tags) {
             const li = document.createElement("li");
-            li.className = "tag-list__item";
+            li.className = "tag-item";
             li.innerHTML = `
-                <span class="tag-list__label">${tag.name}</span>
-                <button class="tag-list__delete" title="Löschen">🗑️</button>
-            `;
+        <span class="tag-name">${tag.name}</span>
+        <button class="tag-delete" type="button" title="Löschen">🗑️</button>
+      `;
 
-            li.querySelector(".tag-list__delete").addEventListener("click", () => {
+            li.querySelector(".tag-delete").addEventListener("click", () => {
                 eventModel.removeTag(tag.id);
             });
 
@@ -51,12 +69,16 @@ class TagList extends HTMLElement {
 
         // Neuen Tag hinzufügen
         const form = this.shadowRoot.querySelector("#tag-form");
-        form.addEventListener("submit", e => {
+        form.addEventListener("submit", (e) => {
             e.preventDefault();
-            const name = this.shadowRoot.querySelector("#tag-name").value.trim();
+
+            const input = this.shadowRoot.querySelector("#tag-name");
+            const name = input.value.trim();
             if (!name) return;
+
             const newTag = new Tag({ id: Date.now(), name });
             eventModel.addTag(newTag);
+
             form.reset();
         });
     }

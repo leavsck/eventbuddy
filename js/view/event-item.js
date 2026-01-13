@@ -19,55 +19,58 @@ class EventItem extends HTMLElement {
         const ev = this.#event;
 
         this.shadowRoot.innerHTML = `
-            <link rel="stylesheet" href="./styles/main.css">
-            <li class="event-list__item" data-id="${ev.id}" tabindex="0">
-                <div class="event-list__meta">
-                    <div class="event-list__title">${ev.title}</div>
-                    <div class="event-list__date">${new Date(ev.dateTime).toLocaleString()}</div>
-                    <div class="event-list__location">${ev.location}</div>
-                    <div class="event-list__status ${ev.status === "abgeschlossen" ? "event-list__status--done" : ""}">
-                        ${ev.status}
-                    </div>
-                </div>
-                <div class="event-list__actions">
-                    <button class="event-list__btn event-list__btn--edit">Bearbeiten</button>
-                    <button class="event-list__btn event-list__btn--delete">Löschen</button>
-                </div>
-            </li>
-        `;
+      <link rel="stylesheet" href="./styles/main.css">
 
-        //damit wenn ich auf event klicke detailansicht kommt
-        this.shadowRoot
-            .querySelector(".event-list__item")
-            .addEventListener("click", (e) => {
-                // verhindern, dass Button-Klicks auch Detail öffnen
-                if (e.target.tagName === "BUTTON") return;
+      <li class="event-list__item" data-id="${ev.id}" tabindex="0">
+        <div class="event-list__meta">
+          <div class="event-list__title">${ev.title}</div>
+          <div class="event-list__date">${new Date(ev.dateTime).toLocaleString()}</div>
+          <div class="event-list__location">${ev.location}</div>
+          <div class="event-list__status ${ev.status === "abgeschlossen" ? "event-list__status--done" : ""}">
+            ${ev.status}
+          </div>
+        </div>
 
-                this.dispatchEvent(new CustomEvent("show-event-detail", {
+        <div class="event-list__actions">
+          <button class="btn btn-edit" type="button">Bearbeiten</button>
+          <button class="btn btn-delete" type="button">Löschen</button>
+        </div>
+      </li>
+    `;
+
+        // Klick auf Item → Detail anzeigen (aber nicht, wenn Button gedrückt)
+        this.shadowRoot.querySelector(".event-list__item").addEventListener("click", (e) => {
+            if (e.target.closest("button")) return;
+
+            this.dispatchEvent(
+                new CustomEvent("show-event-detail", {
                     detail: this.#event,
                     bubbles: true,
                     composed: true
-                }));
-            });
-
-        // === Event-Buttons ===
-        const editBtn = this.shadowRoot.querySelector(".event-list__btn--edit");
-        const deleteBtn = this.shadowRoot.querySelector(".event-list__btn--delete");
-
-        editBtn.addEventListener("click", () => {
-            this.dispatchEvent(new CustomEvent("edit-event", {
-                detail: this.#event,
-                bubbles: true,
-                composed: true
-            }));
+                })
+            );
         });
 
-        deleteBtn.addEventListener("click", () => {
-            this.dispatchEvent(new CustomEvent("delete-event", {
-                detail: this.#event.id,
-                bubbles: true,
-                composed: true
-            }));
+        // Bearbeiten
+        this.shadowRoot.querySelector(".btn-edit").addEventListener("click", () => {
+            this.dispatchEvent(
+                new CustomEvent("edit-event", {
+                    detail: this.#event,
+                    bubbles: true,
+                    composed: true
+                })
+            );
+        });
+
+        // Löschen
+        this.shadowRoot.querySelector(".btn-delete").addEventListener("click", () => {
+            this.dispatchEvent(
+                new CustomEvent("delete-event", {
+                    detail: this.#event.id,
+                    bubbles: true,
+                    composed: true
+                })
+            );
         });
     }
 }

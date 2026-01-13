@@ -1,0 +1,46 @@
+/* styles/buttons.scss */
+
+/* ===== Shared Button System ===== */
+.btn {
+  border: none;
+  border-radius: 12px;
+  padding: 10px 16px;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    filter: brightness(0.95);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+/* Primary = dein rosa (z.B. Tag hinzufügen / Event speichern) */
+.btn-primary {
+  background: var(--primary);
+  color: #fff;
+}
+
+/* Secondary = neutral (Event verwerfen) */
+.btn-secondary {
+  background: var(--muted);
+  color: var(--fg);
+}
+
+/* Detail/Edit/Delete Buttons (hell/dunkelrosa) */
+.btn-edit {
+  background: var(--pink-light);
+  color: #111;
+}
+
+.btn-delete {
+  background: var(--pink-dark);
+  color: #fff;
+}

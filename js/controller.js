@@ -106,6 +106,13 @@ export class Controller {
             this.showSection("list");
             this.setActiveButton("btn-all-events");
         });
+
+        //bei event löschen wieder zurück zu listenansicht 
+        form.addEventListener("cancel-event-form", () => {
+            this.showSection("list");
+            this.setActiveButton("btn-all-events");
+        });
+
     }
 
     // === Ansicht wechseln ===

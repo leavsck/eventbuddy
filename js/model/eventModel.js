@@ -65,12 +65,6 @@ export class EventModel extends EventTarget {
         this.dispatchEvent(new CustomEvent("participantAdded", { detail: participant }));
     }
 
-    addParticipant(participant) {
-        this.#participants.push(participant);
-        this.dispatchEvent(new CustomEvent("participantAdded", { detail: participant }));
-    }
-
-
     // === JSON-Ladevorgang ===
     #loadFromJSON() {
         Promise.all([ //promise holt in json result und erst wenn das geladen ist
