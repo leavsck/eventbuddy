@@ -1,0 +1,70 @@
+@use 'mixins' as *;
+
+.event-detail {
+  @include card;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.event-detail__title {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.event-detail__info {
+  font-size: 14px;
+  opacity: .8;
+}
+
+.event-detail__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.event-detail__tag {
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 12px;
+  background: var(--bg-elev);
+}
+
+.event-detail__participants {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.event-detail__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.event-detail__btn {
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 0;
+  font-weight: 600;
+  cursor: pointer;
+
+  &--edit {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  &--delete {
+    background: #ef4444;
+    color: #fff;
+  }
+
+  &:hover {
+    filter: brightness(0.95);
+  }
+}
+
+

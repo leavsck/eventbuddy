@@ -1,0 +1,16 @@
+@mixin card {
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+@mixin ring($color) {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba($color, .35);
+}
+
+@mixin truncate {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}

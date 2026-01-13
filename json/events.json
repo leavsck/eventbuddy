@@ -1,0 +1,21 @@
+[
+  {
+    "id": 1,
+    "title": "Workshop Tailwind CSS",
+    "dateTime": "2024-10-10T14:00",
+    "location": "Online",
+    "status": "geplant",
+    "tags": ["Workshop"],
+    "participants": [1, 2],
+    "image": "img/workshop.png"
+  },
+  {
+    "id": 2,
+    "title": "Team Meeting Q3",
+    "dateTime": "2024-07-01T10:00",
+    "location": "Büro A.101",
+    "status": "abgeschlossen",
+    "tags": ["Meeting"],
+    "participants": [3]
+  }
+]

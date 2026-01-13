@@ -1,0 +1,21 @@
+:root {
+  --bg: #f5f7fb;
+  --bg-elev: #ffffff;
+  --fg: #111827;
+  --muted: #cfd6e4;
+  --border: #e5e7eb;
+  --primary: #10b981;
+  --accent: #3b82f6;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0b1220;
+    --bg-elev: #121a2a;
+    --fg: #e5e7eb;
+    --muted: #2a3550;
+    --border: #1f2937;
+    --primary: #34d399;
+    --accent: #60a5fa;
+  }
+}

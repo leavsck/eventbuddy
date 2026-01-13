@@ -1,0 +1,56 @@
+@use 'mixins' as *;
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+}
+
+.form__label {
+  font-weight: 600;
+}
+
+.form__input,
+.form__select,
+.form__textarea {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px;
+  background: transparent;
+  color: inherit;
+  font-family: inherit;
+
+  &:focus {
+    @include ring(#10b981);
+  }
+}
+
+.form__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.form__btn {
+  border: 0;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 10px 16px;
+
+  &--primary {
+    background: var(--primary);
+    color: #fff;
+  }
+
+  &--secondary {
+    background: var(--border);
+    color: var(--fg);
+  }
+
+  &:hover {
+    filter: brightness(0.95);
+  }
+}

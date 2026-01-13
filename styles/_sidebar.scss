@@ -1,0 +1,35 @@
+@use 'mixins' as *;
+
+.sidebar {
+  @include card;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.sidebar__header {
+  padding: 16px;
+  border-bottom: 1px solid var(--border);
+  font-weight: 600;
+}
+
+.sidebar__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+}
+
+.sidebar__btn {
+  background: var(--primary);
+  color: white;
+  border: 0;
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover {
+    filter: brightness(0.95);
+  }
+}

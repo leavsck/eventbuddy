@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EventBuddy – Event & Teilnehmerverwaltung</title>
+    <link rel="stylesheet" href="styles/main.css" />
+</head>
+
+<body class="app">
+<div class="layout">
+    <!-- === Sidebar === -->
+    <aside class="sidebar">
+        <header class="sidebar__header">
+            <h1 class="sidebar__title">EventBuddy</h1>
+        </header>
+
+        <nav class="sidebar__nav">
+            <button class="sidebar__btn" id="btn-all-events">Alle Events anzeigen</button>
+            <button class="sidebar__btn" id="btn-new-event">Event erstellen</button>
+            <button class="sidebar__btn" id="btn-new-participant">Teilnehmer anlegen</button>
+            <button class="sidebar__btn" id="btn-manage-tags">Tags verwalten</button>
+        </nav>
+    </aside>
+
+    <!-- === Hauptinhalt === -->
+    <main class="main">
+        <!-- === Filterleiste === -->
+        <section id="filter-section">
+            <h2>Filter</h2>
+
+            <label for="filter-status">Status:</label>
+            <select id="filter-status" name="status">
+                <option value="">Alle</option>
+                <option value="geplant">Geplant</option>
+                <option value="abgeschlossen">Abgeschlossen</option>
+            </select>
+
+            <label for="filter-participant">Teilnehmer:</label>
+            <select id="filter-participant" name="participant">
+                <option value="">Alle</option>
+            </select>
+
+            <label for="filter-tag">Tag:</label>
+            <select id="filter-tag" name="tag">
+                <option value="">Alle</option>
+            </select>
+
+            <button id="btn-apply-filter">Filtern</button>
+        </section>
+
+        <!-- === Event-Liste === -->
+        <section id="event-list-section">
+            <div class="event-list">
+                <!-- Richtiges Custom Element -->
+                <event-list></event-list>
+            </div>
+        </section>
+
+        <!-- === Event-Formular === -->
+        <section id="event-form-section" class="hidden">
+            <div class="form">
+                <event-form></event-form>
+            </div>
+        </section>
+
+        <!-- === Event-Formular === -->
+        <section id="event-detail-section" class="hidden">
+            <div class="form">
+                <event-detail></event-detail>
+            </div>
+        </section>
+
+        <!-- === Teilnehmerverwaltung === -->
+        <section id="participant-section" class="hidden">
+            <div class="participant-list">
+                <participant-list></participant-list>
+            </div>
+        </section>
+
+        <!-- === Tagverwaltung === -->
+        <section id="tag-section" class="hidden">
+            <div class="tag-list">
+                <tag-list></tag-list>
+            </div>
+        </section>
+    </main>
+</div>
+
+<!-- === Templates für Web Components === -->
+
+<!-- Template: Event-Liste -->
+<template id="template-event-list">
+    <div class="event-list">
+        <!-- Dynamisch generierte Event-Karten -->
+    </div>
+</template>
+
+<!-- Template: Event-Detail -->
+<template id="template-event-detail">
+    <div class="event-detail">
+        <h2 id="detail-title"></h2>
+        <p><strong>Datum & Uhrzeit:</strong> <span id="detail-dateTime"></span></p>
+        <p><strong>Ort:</strong> <span id="detail-location"></span></p>
+        <p><strong>Status:</strong> <span id="detail-status"></span></p>
+        <p><strong>Beschreibung:</strong></p>
+        <p id="detail-description"></p>
+        <p><strong>Tags:</strong> <span id="detail-tags"></span></p>
+        <p><strong>Teilnehmer:</strong></p>
+        <ul id="detail-participants"></ul>
+
+        <div class="event-detail__actions">
+            <button class="event-detail__btn event-detail__btn--edit" id="btn-edit-event">
+                Event bearbeiten
+            </button>
+            <button class="event-detail__btn event-detail__btn--delete" id="btn-delete-event">
+                Event löschen
+            </button>
+        </div>
+    </div>
+</template>
+
+<!-- Template: Event-Formular -->
+<template id="template-event-form">
+    <form class="form" id="event-form">
+        <h2>Event erstellen / bearbeiten</h2>
+
+        <label for="event-title">Titel*</label>
+        <input id="event-title" name="title" type="text" required />
+
+        <label for="event-dateTime">Datum & Uhrzeit*</label>
+        <input id="event-dateTime" name="dateTime" type="datetime-local" required />
+
+        <label for="event-location">Ort*</label>
+        <input id="event-location" name="location" type="text" required />
+
+        <label for="event-description">Beschreibung</label>
+        <textarea id="event-description" name="description"></textarea>
+
+        <label for="event-status">Status</label>
+        <select id="event-status" name="status">
+            <option value="geplant">Geplant</option>
+            <option value="abgeschlossen">Abgeschlossen</option>
+        </select>
+
+        <label for="event-tags">Tags</label>
+        <select id="event-tags" name="tags" multiple></select>
+
+        <label for="event-participants">Teilnehmer</label>
+        <select id="event-participants" name="participants" multiple></select>
+
+        <div class="form__actions">
+            <button class="form__btn form__btn--primary" type="submit" id="btn-save-event">
+                Event speichern
+            </button>
+            <button class="form__btn form__btn--secondary" type="button" id="btn-cancel-event">
+                Abbrechen
+            </button>
+        </div>
+    </form>
+</template>
+
+<!-- Template: Teilnehmer-Liste -->
+<template id="template-participant-list">
+    <div class="participant-list">
+        <h2>Teilnehmer anlegen</h2>
+        <form class="form" id="participant-form">
+            <label for="participant-name">Name*</label>
+            <input id="participant-name" name="name" type="text" required />
+
+            <label for="participant-email">E-Mail*</label>
+            <input id="participant-email" name="email" type="email" required />
+
+            <button class="form__btn form__btn--primary" type="submit">
+                Hinzufügen
+            </button>
+        </form>
+
+        <h3>Bestehende Teilnehmer</h3>
+        <ul id="participant-items"></ul>
+    </div>
+</template>
+
+<!-- Template: Tag-Liste -->
+<template id="template-tag-list">
+    <div class="tag-list">
+        <h2>Tags verwalten</h2>
+        <form class="form" id="tag-form">
+            <label for="tag-name">Neuer Tag:</label>
+            <input id="tag-name" name="name" type="text" required />
+            <button class="form__btn form__btn--primary" type="submit">
+                Tag hinzufügen
+            </button>
+        </form>
+
+        <h3>Bestehende Tags</h3>
+        <ul id="tag-items"></ul>
+    </div>
+</template>
+
+<!-- === Hauptscript (muss als Modul geladen werden) === -->
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

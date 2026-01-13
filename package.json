@@ -1,0 +1,11 @@
+{
+  "name": "event-ui-scss",
+  "private": true,
+  "scripts": {
+    "dev": "sass styles/main.scss styles/main.css --watch --style=expanded --source-map",
+    "build": "sass styles/main.scss styles/main.css --style=compressed --no-source-map"
+  },
+  "devDependencies": {
+    "sass": "^1.90.0"
+  }
+}
