@@ -1,4 +1,4 @@
-@use 'mixins' as *;
+@use "mixins" as *;
 
 .sidebar {
   @include card;
@@ -32,4 +32,10 @@
   &:hover {
     filter: brightness(0.95);
   }
+}
+
+/* Aktiver Sidebar Button */
+.sidebar__btn--active {
+  filter: brightness(0.8);
+  transform: scale(0.98);
 }

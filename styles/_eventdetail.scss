@@ -1,5 +1,6 @@
-@use 'mixins' as *;
+@use "mixins" as *;
 
+/* ===== Alte Event Detail Klassen (falls du sie noch irgendwo nutzt) ===== */
 .event-detail {
   @include card;
   padding: 16px;
@@ -15,7 +16,7 @@
 
 .event-detail__info {
   font-size: 14px;
-  opacity: .8;
+  opacity: 0.8;
 }
 
 .event-detail__tags {
@@ -67,4 +68,124 @@
   }
 }
 
+/* ===== Neue Event Detail View (Screenshot Layout) ===== */
+.detail-wrap {
+  padding: 24px;
+}
 
+.detail-header {
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+}
+
+.detail-brand {
+  font-weight: 700;
+  font-size: 22px;
+  opacity: 0.9;
+}
+
+.detail-card {
+  background: rgba(255, 255, 255, 0.96);
+  color: #111;
+  border-radius: 10px;
+  padding: 22px 26px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  max-width: 900px;
+}
+
+.detail-title {
+  margin: 0 0 18px 0;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 0.9fr;
+  gap: 34px;
+}
+
+.detail-row {
+  margin-bottom: 14px;
+}
+
+.detail-label {
+  font-size: 12px;
+  font-weight: 700;
+  opacity: 0.7;
+  margin-bottom: 6px;
+}
+
+.detail-value {
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.detail-image {
+  width: 70px;
+  height: 70px;
+  border: 2px solid rgba(0, 0, 0, 0.25);
+  border-radius: 4px;
+  position: relative;
+}
+
+.detail-image::before,
+.detail-image::after {
+  content: "";
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  top: 50%;
+  height: 2px;
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.detail-image::before {
+  transform: rotate(45deg);
+}
+
+.detail-image::after {
+  transform: rotate(-45deg);
+}
+
+.detail-chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: #eaeaea;
+  font-size: 12px;
+}
+
+.detail-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.btn-edit {
+  background: #f5b400;
+  color: #111;
+}
+
+.btn-delete {
+  background: #e44335;
+  color: #fff;
+}
+
+.detail-empty {
+  padding: 18px;
+  opacity: 0.75;
+  font-style: italic;
+}

@@ -19,27 +19,6 @@
     --accent: #60a5fa;
   }
 }
-.layout {
-  display: grid;
-  gap: 16px;
-  height: 100vh;
-  padding: 16px;
-  /* damit es responsive ist*/
-}
-@media (min-width: 768px) {
-  .layout {
-    grid-template-columns: 300px 1fr;
-  }
-}
-
-.icon-btn {
-  background: transparent;
-  border: 0;
-  font-size: 20px;
-  cursor: pointer;
-  color: var(--fg);
-}
-
 * {
   box-sizing: border-box;
 }
@@ -51,6 +30,32 @@ body {
   color: var(--fg);
 }
 
+.layout {
+  display: grid;
+  gap: 16px;
+  height: 100vh;
+  padding: 16px;
+  /* damit es responsive ist */
+}
+@media (min-width: 768px) {
+  .layout {
+    grid-template-columns: 300px 1fr;
+  }
+}
+
+.hidden {
+  display: none;
+}
+
+.icon-btn {
+  background: transparent;
+  border: 0;
+  font-size: 20px;
+  cursor: pointer;
+  color: var(--fg);
+}
+
+/* ===== Filter Section ===== */
 #filter-section {
   background: var(--bg-elev);
   border: 1px solid var(--border);
@@ -61,7 +66,8 @@ body {
   padding: 12px 16px;
   align-items: center;
 }
-#filter-section select, #filter-section button {
+#filter-section select,
+#filter-section button {
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 6px 8px;
@@ -74,6 +80,21 @@ body {
   border: none;
   font-weight: 600;
   cursor: pointer;
+}
+#filter-section button:hover {
+  filter: brightness(0.95);
+}
+
+/* ===== Scrollbars ===== */
+.messages::-webkit-scrollbar,
+.event-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.messages::-webkit-scrollbar-thumb,
+.event-list::-webkit-scrollbar-thumb {
+  background: var(--muted);
+  border-radius: 999px;
 }
 
 .sidebar {
@@ -109,6 +130,12 @@ body {
 }
 .sidebar__btn:hover {
   filter: brightness(0.95);
+}
+
+/* Aktiver Sidebar Button */
+.sidebar__btn--active {
+  filter: brightness(0.8);
+  transform: scale(0.98);
 }
 
 .event-list {
@@ -160,22 +187,74 @@ body {
   font-weight: 600;
 }
 
-.messages::-webkit-scrollbar,
-.event-list::-webkit-scrollbar {
-  width: 8px;
+/* ===== Alte Event Detail Klassen (falls du sie noch irgendwo nutzt) ===== */
+.event-detail {
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-.hidden {
-  display: none;
+.event-detail__title {
+  font-size: 20px;
+  font-weight: 700;
 }
 
-.messages::-webkit-scrollbar-thumb,
-.event-list::-webkit-scrollbar-thumb {
-  background: var(--muted);
+.event-detail__info {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+.event-detail__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.event-detail__tag {
+  padding: 4px 8px;
+  border: 1px solid var(--border);
   border-radius: 999px;
+  font-size: 12px;
+  background: var(--bg-elev);
 }
 
-/* ===== Event Detail View (Layout wie Screenshot) ===== */
+.event-detail__participants {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.event-detail__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.event-detail__btn {
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 0;
+  font-weight: 600;
+  cursor: pointer;
+}
+.event-detail__btn--edit {
+  background: var(--accent);
+  color: #fff;
+}
+.event-detail__btn--delete {
+  background: #ef4444;
+  color: #fff;
+}
+.event-detail__btn:hover {
+  filter: brightness(0.95);
+}
+
+/* ===== Neue Event Detail View (Screenshot Layout) ===== */
 .detail-wrap {
   padding: 24px;
 }
@@ -281,14 +360,6 @@ body {
   margin-top: 18px;
 }
 
-.btn {
-  border: none;
-  border-radius: 8px;
-  padding: 10px 14px;
-  font-weight: 700;
-  cursor: pointer;
-}
-
 .btn-edit {
   background: #f5b400;
   color: #111;
@@ -305,13 +376,62 @@ body {
   font-style: italic;
 }
 
-/* damit der button auf dem ich grade bin hervorgehoben wird*/
-.sidebar__btn--active {
-  filter: brightness(0.8);
-  transform: scale(0.98);
+/* ===== Alte Form-Klassen (falls irgendwo verwendet) ===== */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
 }
 
-/* Styling von Event erstellen */
+.form__label {
+  font-weight: 600;
+}
+
+.form__input,
+.form__select,
+.form__textarea {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px;
+  background: transparent;
+  color: inherit;
+  font-family: inherit;
+}
+.form__input:focus,
+.form__select:focus,
+.form__textarea:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.35);
+}
+
+.form__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.form__btn {
+  border: 0;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 10px 16px;
+}
+.form__btn--primary {
+  background: var(--primary);
+  color: #fff;
+}
+.form__btn--secondary {
+  background: var(--border);
+  color: var(--fg);
+}
+.form__btn:hover {
+  filter: brightness(0.95);
+}
+
+/* ===== Neues Form-Card Styling (Event erstellen + Teilnehmerseite nutzt das) ===== */
 .form-card {
   background: rgba(255, 255, 255, 0.96);
   color: #111;
@@ -381,7 +501,7 @@ body {
   margin-top: 10px;
 }
 
-/* Buttons */
+/* ===== Shared Buttons (neu) ===== */
 .btn {
   border: none;
   border-radius: 8px;
@@ -400,7 +520,7 @@ body {
   color: #111;
 }
 
-/* ===== Teilnehmer Seite Styling===== */
+/* ===== Teilnehmer Seite Styling ===== */
 .list-title {
   margin-top: 18px;
   margin-bottom: 10px;
@@ -409,19 +529,13 @@ body {
   opacity: 0.85;
 }
 
-.participant-item {
-  background: #ffffff;
-  color: #111;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 14px 16px;
-}
-
+/* WICHTIG: nur eine participant-item Definition behalten */
 .participant-item {
   background: var(--bg-elev);
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 12px 14px;
+  color: inherit;
 }
 
 .participant-name {

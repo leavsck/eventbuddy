@@ -1,5 +1,10 @@
 [
   { "id": 1, "name": "Max Mustermann", "email": "max@example.com" },
   { "id": 2, "name": "Erika Musterfrau", "email": "erika@example.com" },
-  { "id": 3, "name": "John Doe", "email": "john@example.com" }
+  { "id": 3, "name": "John Doe", "email": "john@example.com" },
+  { "id": 4, "name": "Anna Schmidt", "email": "anna.schmidt@example.com" },
+  { "id": 5, "name": "Lukas Huber", "email": "lukas.huber@example.com" },
+  { "id": 6, "name": "Sarah Meier", "email": "sarah.meier@example.com" },
+  { "id": 7, "name": "Paul Berger", "email": "paul.berger@example.com" },
+  { "id": 8, "name": "Laura König", "email": "laura.koenig@example.com" }
 ]
