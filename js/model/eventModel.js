@@ -48,15 +48,26 @@ export class EventModel extends EventTarget {
         this.dispatchEvent(new CustomEvent("tagAdded", { detail: tag }));
     }
 
-    /** true, wenn kein Event diesen Tag nutzt */
+    /** Tag darf nur gelöscht werden, wenn KEIN Event ihn nutzt */
     canDeleteTag(tagId) {
         const idStr = String(tagId);
-        return !this.#events.some(ev =>
-            (ev.tags || []).some(t => String(t.id) === idStr)
-        );
+
+        return !this.#events.some(ev => {
+            const tags = ev.tags || [];
+
+            // tags können Tag-Objekte ODER Strings sein → beides abfangen
+            return tags.some(t => {
+                if (t && typeof t === "object" && "id" in t) return String(t.id) === idStr;
+                if (typeof t === "string") {
+                    const tagObj = this.#tags.find(x => x.name === t);
+                    return tagObj ? String(tagObj.id) === idStr : false;
+                }
+                return false;
+            });
+        });
     }
 
-    /** returns boolean success */
+    /** returns boolean (true = gelöscht, false = blockiert) */
     removeTag(tagId) {
         if (!this.canDeleteTag(tagId)) {
             this.dispatchEvent(new CustomEvent("tagDeleteBlocked", { detail: tagId }));
@@ -64,13 +75,22 @@ export class EventModel extends EventTarget {
         }
 
         const idStr = String(tagId);
+
+        // aus tag-liste entfernen
         this.#tags = this.#tags.filter(t => String(t.id) !== idStr);
 
-        // Safety: remove references from events (falls vorhanden)
+        // referenzen aus events entfernen (safety)
         this.#events = this.#events.map(ev => {
-            if (Array.isArray(ev.tags)) {
-                ev.tags = ev.tags.filter(t => String(t.id) !== idStr);
-            }
+            const tags = ev.tags || [];
+            ev.tags = tags.filter(t => {
+                if (t && typeof t === "object" && "id" in t) return String(t.id) !== idStr;
+                if (typeof t === "string") {
+                    const tagObj = this.#tags.find(x => x.name === t);
+                    // wenn tagObj nicht mehr existiert, bleibt string evtl. übrig – entfernen wir
+                    return tagObj ? String(tagObj.id) !== idStr : false;
+                }
+                return true;
+            });
             return ev;
         });
 

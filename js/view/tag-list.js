@@ -73,40 +73,31 @@ class TagList extends HTMLElement {
 
         list.innerHTML = "";
 
-        const tags = eventModel.tags || [];
-
-        for (const t of tags) {
+        for (const t of (eventModel.tags || [])) {
             const li = document.createElement("li");
             li.className = "tag-item";
 
-            // kannDeleteTag falls vorhanden, sonst erlauben
-            const canDelete = typeof eventModel.canDeleteTag === "function"
-                ? eventModel.canDeleteTag(t.id)
-                : true;
+            const inUse = !eventModel.canDeleteTag(t.id);
 
             li.innerHTML = `
         <span class="tag-name">${t.name}</span>
-        <button class="tag-delete" type="button" title="Löschen" ${canDelete ? "" : "disabled"}>
+        <button class="tag-delete" type="button" title="Löschen">
           🗑️
         </button>
       `;
 
             li.querySelector(".tag-delete")?.addEventListener("click", () => {
-                // 1) Wenn in Verwendung -> klare Meldung
-                if (typeof eventModel.canDeleteTag === "function" && !eventModel.canDeleteTag(t.id)) {
-                    alert("Dieser Tag ist noch einem Event zugeordnet. Entferne ihn zuerst aus allen Events.");
+                // IMMER Feedback geben:
+                if (inUse) {
+                    alert(`„${t.name}“ kann nicht gelöscht werden, weil er noch einem Event zugeordnet ist.`);
                     return;
                 }
 
-                // 2) Confirm
-                const ok = window.confirm(`Tag "${t.name}" wirklich endgültig löschen?`);
+                const ok = window.confirm(`Tag „${t.name}“ wirklich endgültig löschen?`);
                 if (!ok) return;
 
-                // 3) Löschen
                 const success = eventModel.removeTag(t.id);
-
-                // falls removeTag boolean zurückgibt
-                if (success === false) {
+                if (!success) {
                     alert("Tag konnte nicht gelöscht werden (wird noch verwendet).");
                 }
             });
