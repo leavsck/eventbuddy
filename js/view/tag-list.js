@@ -5,20 +5,42 @@ class TagList extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({ mode: "open" });
+
+        this.onSubmit = this.onSubmit.bind(this);
+        this.onData = this.onData.bind(this);
     }
 
     connectedCallback() {
         this.render();
 
-        // Wenn Daten geladen wurden oder sich Tags ändern → neu rendern
-        eventModel.addEventListener("dataLoaded", () => this.render());
-        eventModel.addEventListener("tagAdded", () => this.render());
-        eventModel.addEventListener("tagRemoved", () => this.render());
+        eventModel.addEventListener("dataLoaded", this.onData);
+        eventModel.addEventListener("tagAdded", this.onData);
+        eventModel.addEventListener("tagRemoved", this.onData);
+        eventModel.addEventListener("eventAdded", this.onData);
+        eventModel.addEventListener("eventDeleted", this.onData);
+        eventModel.addEventListener("eventUpdated", this.onData);
+
+        this.shadowRoot.querySelector("#tag-form")?.addEventListener("submit", this.onSubmit);
+    }
+
+    disconnectedCallback() {
+        eventModel.removeEventListener("dataLoaded", this.onData);
+        eventModel.removeEventListener("tagAdded", this.onData);
+        eventModel.removeEventListener("tagRemoved", this.onData);
+        eventModel.removeEventListener("eventAdded", this.onData);
+        eventModel.removeEventListener("eventDeleted", this.onData);
+        eventModel.removeEventListener("eventUpdated", this.onData);
+
+        this.shadowRoot.querySelector("#tag-form")?.removeEventListener("submit", this.onSubmit);
+    }
+
+    onData() {
+        this.renderList();
     }
 
     render() {
         this.shadowRoot.innerHTML = `
-      <link rel="stylesheet" href="./styles/main.css">
+      <link rel="stylesheet" href="styles/main.css">
 
       <section class="form-card">
         <div class="form-card__header">
@@ -28,14 +50,7 @@ class TagList extends HTMLElement {
         <form id="tag-form" class="form-grid">
           <div class="form-field">
             <label class="form-label" for="tag-name">Neuer Tag</label>
-            <input
-              class="form-input"
-              id="tag-name"
-              name="name"
-              type="text"
-              required
-              placeholder="z. B. Workshop"
-            />
+            <input class="form-input" id="tag-name" name="name" type="text" required placeholder="z. B. Workshop" />
           </div>
 
           <div class="form-actions">
@@ -48,39 +63,68 @@ class TagList extends HTMLElement {
       </section>
     `;
 
+        this.renderList();
+        this.shadowRoot.querySelector("#tag-form")?.addEventListener("submit", this.onSubmit);
+    }
+
+    renderList() {
         const list = this.shadowRoot.querySelector(".tag-items");
+        if (!list) return;
+
         list.innerHTML = "";
 
-        // Tags aus dem Model rendern
-        for (const tag of eventModel.tags) {
+        const tags = eventModel.tags || [];
+
+        for (const t of tags) {
             const li = document.createElement("li");
             li.className = "tag-item";
+
+            // kannDeleteTag falls vorhanden, sonst erlauben
+            const canDelete = typeof eventModel.canDeleteTag === "function"
+                ? eventModel.canDeleteTag(t.id)
+                : true;
+
             li.innerHTML = `
-        <span class="tag-name">${tag.name}</span>
-        <button class="tag-delete" type="button" title="Löschen">🗑️</button>
+        <span class="tag-name">${t.name}</span>
+        <button class="tag-delete" type="button" title="Löschen" ${canDelete ? "" : "disabled"}>
+          🗑️
+        </button>
       `;
 
-            li.querySelector(".tag-delete").addEventListener("click", () => {
-                eventModel.removeTag(tag.id);
+            li.querySelector(".tag-delete")?.addEventListener("click", () => {
+                // 1) Wenn in Verwendung -> klare Meldung
+                if (typeof eventModel.canDeleteTag === "function" && !eventModel.canDeleteTag(t.id)) {
+                    alert("Dieser Tag ist noch einem Event zugeordnet. Entferne ihn zuerst aus allen Events.");
+                    return;
+                }
+
+                // 2) Confirm
+                const ok = window.confirm(`Tag "${t.name}" wirklich endgültig löschen?`);
+                if (!ok) return;
+
+                // 3) Löschen
+                const success = eventModel.removeTag(t.id);
+
+                // falls removeTag boolean zurückgibt
+                if (success === false) {
+                    alert("Tag konnte nicht gelöscht werden (wird noch verwendet).");
+                }
             });
 
             list.appendChild(li);
         }
+    }
 
-        // Neuen Tag hinzufügen
-        const form = this.shadowRoot.querySelector("#tag-form");
-        form.addEventListener("submit", (e) => {
-            e.preventDefault();
+    onSubmit(e) {
+        e.preventDefault();
 
-            const input = this.shadowRoot.querySelector("#tag-name");
-            const name = input.value.trim();
-            if (!name) return;
+        const input = this.shadowRoot.querySelector("#tag-name");
+        const name = (input?.value || "").trim();
+        if (!name) return;
 
-            const newTag = new Tag({ id: Date.now(), name });
-            eventModel.addTag(newTag);
-
-            form.reset();
-        });
+        eventModel.addTag(new Tag({ id: Date.now(), name }));
+        e.target.reset();
+        input?.focus();
     }
 }
 

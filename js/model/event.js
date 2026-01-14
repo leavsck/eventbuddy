@@ -7,8 +7,19 @@ export default class Event {
     #status;
     #tags;
     #participants;
+    #image; // optional
 
-    constructor({ id, title, dateTime, location, description, status, tags = [], participants = [] }) {
+    constructor({
+                    id,
+                    title,
+                    dateTime,
+                    location,
+                    description,
+                    status,
+                    tags = [],
+                    participants = [],
+                    image = ""
+                }) {
         this.#id = id;
         this.#title = title;
         this.#dateTime = dateTime;
@@ -17,6 +28,7 @@ export default class Event {
         this.#status = status;
         this.#tags = tags;
         this.#participants = participants;
+        this.#image = image || "";
     }
 
     get id() { return this.#id; }
@@ -27,15 +39,18 @@ export default class Event {
     get status() { return this.#status; }
     get tags() { return this.#tags; }
     get participants() { return this.#participants; }
+    get image() { return this.#image; }
 
-    addTag(tag) { this.#tags.push(tag); }
-    addParticipant(p) { this.#participants.push(p); }
+    set tags(val) { this.#tags = Array.isArray(val) ? val : []; }
+    set participants(val) { this.#participants = Array.isArray(val) ? val : []; }
+    set image(val) { this.#image = val || ""; }
 
     update(data) {
-        this.#title = data.title;
-        this.#dateTime = data.dateTime;
-        this.#location = data.location;
-        this.#description = data.description;
-        this.#status = data.status;
+        this.#title = data.title ?? this.#title;
+        this.#dateTime = data.dateTime ?? this.#dateTime;
+        this.#location = data.location ?? this.#location;
+        this.#description = data.description ?? this.#description;
+        this.#status = data.status ?? this.#status;
+        if (data.image !== undefined) this.#image = data.image || "";
     }
 }

@@ -6,7 +6,6 @@ class ParticipantList extends HTMLElement {
         super();
         this.attachShadow({ mode: "open" });
 
-        // einmalige Handler binden (wichtig!)
         this.onSubmit = this.onSubmit.bind(this);
         this.onDataChanged = this.onDataChanged.bind(this);
     }
@@ -17,19 +16,14 @@ class ParticipantList extends HTMLElement {
         eventModel.addEventListener("dataLoaded", this.onDataChanged);
         eventModel.addEventListener("participantAdded", this.onDataChanged);
 
-        // Submit nur 1x registrieren (nicht in jedem render)
-        this.shadowRoot
-            .querySelector("#participant-form")
-            .addEventListener("submit", this.onSubmit);
+        this.shadowRoot.querySelector("#participant-form")?.addEventListener("submit", this.onSubmit);
     }
 
     disconnectedCallback() {
         eventModel.removeEventListener("dataLoaded", this.onDataChanged);
         eventModel.removeEventListener("participantAdded", this.onDataChanged);
 
-        this.shadowRoot
-            .querySelector("#participant-form")
-            ?.removeEventListener("submit", this.onSubmit);
+        this.shadowRoot.querySelector("#participant-form")?.removeEventListener("submit", this.onSubmit);
     }
 
     onDataChanged() {
@@ -66,13 +60,10 @@ class ParticipantList extends HTMLElement {
       </section>
     `;
 
-        // Liste einmal initial zeichnen
         this.renderList();
 
-        // Submit Listener nur 1x (nach innerHTML neu setzen!)
-        this.shadowRoot
-            .querySelector("#participant-form")
-            .addEventListener("submit", this.onSubmit);
+        // nach innerHTML neu setzen -> listener wieder setzen
+        this.shadowRoot.querySelector("#participant-form")?.addEventListener("submit", this.onSubmit);
     }
 
     renderList() {
@@ -82,7 +73,6 @@ class ParticipantList extends HTMLElement {
         list.innerHTML = "";
 
         const participants = eventModel.participants || [];
-
         if (!participants.length) {
             const empty = document.createElement("div");
             empty.className = "participant-empty";
@@ -109,19 +99,14 @@ class ParticipantList extends HTMLElement {
         if (!form) return;
 
         const data = Object.fromEntries(new FormData(form));
-
         const name = (data.name || "").trim();
         const email = (data.email || "").trim();
 
         if (!name || !email) return;
 
-        const newParticipant = new Participant({
-            id: Date.now(),
-            name,
-            email,
-        });
-
+        const newParticipant = new Participant({ id: Date.now(), name, email });
         eventModel.addParticipant(newParticipant);
+
         form.reset();
         this.shadowRoot.querySelector("#participant-name")?.focus();
     }

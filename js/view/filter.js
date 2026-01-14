@@ -1,7 +1,6 @@
 import { eventModel } from "../model/eventModel.js";
 
 const state = {
-    participantsJsonOnly: [],
     selectedParticipantIds: new Set(),
     selectedTagIds: new Set(),
     selectedStatuses: new Set(),
@@ -55,8 +54,7 @@ function renderStatusCheckboxes() {
     box.querySelectorAll('input[type="checkbox"]').forEach(cb => {
         cb.addEventListener("change", () => {
             const id = cb.value;
-            if (cb.checked) state.selectedStatuses.add(id);
-            else state.selectedStatuses.delete(id);
+            cb.checked ? state.selectedStatuses.add(id) : state.selectedStatuses.delete(id);
             updateLabels();
         });
     });
@@ -68,7 +66,7 @@ function renderParticipantCheckboxes() {
     const box = document.getElementById("filter-participants");
     if (!box) return;
 
-    const items = state.participantsJsonOnly;
+    const items = eventModel.participants || [];
 
     box.innerHTML = `
     <div class="filter-dd__panel-actions">
@@ -93,8 +91,7 @@ function renderParticipantCheckboxes() {
     box.querySelectorAll('input[type="checkbox"]').forEach(cb => {
         cb.addEventListener("change", () => {
             const id = String(cb.value);
-            if (cb.checked) state.selectedParticipantIds.add(id);
-            else state.selectedParticipantIds.delete(id);
+            cb.checked ? state.selectedParticipantIds.add(id) : state.selectedParticipantIds.delete(id);
             updateLabels();
         });
     });
@@ -131,8 +128,7 @@ function renderTagCheckboxes() {
     box.querySelectorAll('input[type="checkbox"]').forEach(cb => {
         cb.addEventListener("change", () => {
             const id = String(cb.value);
-            if (cb.checked) state.selectedTagIds.add(id);
-            else state.selectedTagIds.delete(id);
+            cb.checked ? state.selectedTagIds.add(id) : state.selectedTagIds.delete(id);
             updateLabels();
         });
     });
@@ -158,28 +154,28 @@ function initDropdowns() {
     ddS?.querySelector(".filter-dd__btn")?.addEventListener("click", (e) => {
         e.stopPropagation();
         setDdOpen(ddS, !ddS.classList.contains("is-open"));
-        if (ddP) setDdOpen(ddP, false);
-        if (ddT) setDdOpen(ddT, false);
+        ddP && setDdOpen(ddP, false);
+        ddT && setDdOpen(ddT, false);
     });
 
     ddP?.querySelector(".filter-dd__btn")?.addEventListener("click", (e) => {
         e.stopPropagation();
         setDdOpen(ddP, !ddP.classList.contains("is-open"));
-        if (ddS) setDdOpen(ddS, false);
-        if (ddT) setDdOpen(ddT, false);
+        ddS && setDdOpen(ddS, false);
+        ddT && setDdOpen(ddT, false);
     });
 
     ddT?.querySelector(".filter-dd__btn")?.addEventListener("click", (e) => {
         e.stopPropagation();
         setDdOpen(ddT, !ddT.classList.contains("is-open"));
-        if (ddS) setDdOpen(ddS, false);
-        if (ddP) setDdOpen(ddP, false);
+        ddS && setDdOpen(ddS, false);
+        ddP && setDdOpen(ddP, false);
     });
 
     document.addEventListener("click", () => {
-        if (ddS) setDdOpen(ddS, false);
-        if (ddP) setDdOpen(ddP, false);
-        if (ddT) setDdOpen(ddT, false);
+        ddS && setDdOpen(ddS, false);
+        ddP && setDdOpen(ddP, false);
+        ddT && setDdOpen(ddT, false);
     });
 
     ddS?.querySelector(".filter-dd__panel")?.addEventListener("click", (e) => e.stopPropagation());
@@ -189,29 +185,18 @@ function initDropdowns() {
 
 function init() {
     initDropdowns();
-
-    // Status ist statisch
     renderStatusCheckboxes();
 
-    // Teilnehmer nur aus JSON (nicht neu hinzugefügte)
-    eventModel.addEventListener("dataLoaded", async () => {
-        try {
-            const res = await fetch("json/participants.json");
-            const data = await res.json();
-            state.participantsJsonOnly = data;
-            renderParticipantCheckboxes();
-            renderTagCheckboxes();
-        } catch (e) {
-            console.error("Filter: participants.json konnte nicht geladen werden", e);
-        }
+    eventModel.addEventListener("dataLoaded", () => {
+        renderParticipantCheckboxes();
+        renderTagCheckboxes();
     });
 
-    // Tags live aktuell halten (JSON + neu hinzugefügt)
+    eventModel.addEventListener("participantAdded", () => renderParticipantCheckboxes());
     eventModel.addEventListener("tagAdded", () => renderTagCheckboxes());
     eventModel.addEventListener("tagRemoved", () => renderTagCheckboxes());
 
     document.getElementById("btn-apply-filter")?.addEventListener("click", applyFilters);
-
     updateLabels();
 }
 

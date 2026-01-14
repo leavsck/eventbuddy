@@ -8,7 +8,7 @@
   /* rosa für die buttons in der sidebar und filter :)) */
   --primary: #ec4899;
   --accent: #3b82f6;
-  /* Detail Buttons (Light Mode) */
+  /* 🌸 Detail Buttons (Light Mode) */
   --pink-light: #fbcfe8; /* sehr helles Rosa */
   --pink-dark: #9d174d; /* sehr dunkles Rosa */
 }
@@ -23,7 +23,7 @@
     /* bissi helleres rosa für buttons in sidebar und filter */
     --primary: #f472b6;
     --accent: #60a5fa;
-    /* Detail Buttons (Dark Mode) */
+    /* 🌸 Detail Buttons (Dark Mode) */
     --pink-light: #f472b6; /* etwas kräftiger im Dark Mode */
     --pink-dark: #831843; /* sehr dunkel, aber gut lesbar */
   }
@@ -147,7 +147,61 @@ body {
   transform: scale(0.98);
 }
 
-/* styles/buttons.scss */
+.sidebar {
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.sidebar__header {
+  padding: 16px;
+  border-bottom: 1px solid var(--border);
+  font-weight: 600;
+}
+
+.sidebar__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  /* WICHTIG */
+  flex: 1;
+}
+
+.sidebar__spacer {
+  flex: 1;
+}
+
+/* Standard Buttons */
+.sidebar__btn {
+  background: var(--primary);
+  color: white;
+  border: 0;
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.sidebar__btn:hover {
+  filter: brightness(0.95);
+}
+
+/* Logout Button extra Style */
+.sidebar__btn--logout {
+  background: var(--muted);
+  color: var(--fg);
+}
+
+/* Aktiver Sidebar Button */
+.sidebar__btn--active {
+  filter: brightness(0.8);
+  transform: scale(0.98);
+}
+
+/* styles/_buttons.scss */
 /* ===== Shared Button System ===== */
 .btn {
   border: none;
@@ -168,7 +222,7 @@ body {
   transform: scale(0.98);
 }
 
-/* Primary (z.B. Tag hinzufügen / Event speichern) */
+/* Primary = dein rosa (z.B. Tag hinzufügen / Event speichern) */
 .btn-primary {
   background: var(--primary);
   color: #fff;
@@ -240,7 +294,7 @@ body {
   font-weight: 600;
 }
 
-/* ===== Alte Event Detail Klassen  ===== */
+/* ===== Alte Event Detail Klassen (falls du sie noch irgendwo nutzt) ===== */
 .event-detail {
   background: var(--bg-elev);
   border: 1px solid var(--border);
@@ -307,7 +361,7 @@ body {
   filter: brightness(0.95);
 }
 
-/* ===== Neue Event Detail View  ===== */
+/* ===== Neue Event Detail View (Screenshot Layout) ===== */
 .detail-wrap {
   padding: 24px;
 }
@@ -421,7 +475,7 @@ body {
   font-style: italic;
 }
 
-/* ===== Alte Form-Klassen ===== */
+/* ===== Alte Form-Klassen (falls irgendwo verwendet) ===== */
 .form {
   display: flex;
   flex-direction: column;
@@ -642,22 +696,21 @@ body {
 }
 
 /* keine Punkte in der Teilnehmerliste */
-.participant-list ul {
+.participant-items {
   list-style: none;
   padding-left: 0;
   margin: 0;
-}
-
-.participant-list li::marker {
-  content: "";
 }
 
 .participant-item {
   background: var(--bg-elev);
   border: 1px solid var(--border);
   border-radius: 10px;
-  padding: 12px 14px;
-  color: inherit;
+  padding: 12px 14px; /* gleich wie tags */
+  min-height: 86px; /* optional – nur wenn du 1:1 gleiche Höhe willst */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .participant-name {
@@ -675,15 +728,13 @@ body {
   font-style: italic;
 }
 
-/* bullets weg (Shadow DOM list) */
+/* Teilnehmer-Liste */
 .participant-items {
   list-style: none;
-  padding-left: 0;
+  padding: 0;
   margin: 0;
-}
-
-.participant-items li {
-  list-style: none;
+  display: grid;
+  gap: 10px;
 }
 
 /* styles/_tags.scss */
@@ -694,7 +745,7 @@ body {
   margin: 0;
 }
 
-/* Tag Cards */
+/* Tag Cards (die du aktuell schon in forms drin hast) */
 .tag-items {
   list-style: none;
   padding: 0;
@@ -727,6 +778,37 @@ body {
 }
 .tag-delete:hover {
   filter: brightness(0.92);
+}
+
+/* styles/_danger.scss */
+#danger-section {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  width: min(980px, 100% - 32px);
+  z-index: 99999;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-50%) translateY(-20px);
+  transition: opacity 180ms ease, transform 220ms ease;
+}
+
+#danger-section.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+
+.danger-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 18px 22px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg-elev);
+  box-shadow: 0 16px 50px rgba(0, 0, 0, 0.35);
 }
 
 /*# sourceMappingURL=main.css.map */

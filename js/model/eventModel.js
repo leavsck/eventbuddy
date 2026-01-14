@@ -3,23 +3,16 @@ import Participant from "./participant.js";
 import Tag from "./tag.js";
 
 export class EventModel extends EventTarget {
-    #events;
-    #participants;
-    #tags;
-    #currentEvent;
+    #events = [];
+    #participants = [];
+    #tags = [];
+    #currentEvent = undefined;
 
     constructor() {
         super();
-        this.#events = [];
-        this.#participants = [];
-        this.#tags = [];
-        this.#currentEvent = undefined;
-
-        // JSON-Daten beim Start laden
         this.#loadFromJSON();
     }
 
-    // === Getter & Setter ===
     get events() { return this.#events; }
     get participants() { return this.#participants; }
     get tags() { return this.#tags; }
@@ -30,7 +23,6 @@ export class EventModel extends EventTarget {
         this.dispatchEvent(new CustomEvent("eventSelected", { detail: ev }));
     }
 
-    // === CRUD-Methoden für Events ===
     addEvent(ev) {
         this.#events.push(ev);
         this.dispatchEvent(new CustomEvent("eventAdded", { detail: ev }));
@@ -40,24 +32,50 @@ export class EventModel extends EventTarget {
         const idx = this.#events.findIndex(e => e.id === updatedEvent.id);
         if (idx >= 0) {
             this.#events[idx] = updatedEvent;
+            if (this.#currentEvent?.id === updatedEvent.id) this.#currentEvent = updatedEvent;
             this.dispatchEvent(new CustomEvent("eventUpdated", { detail: updatedEvent }));
         }
     }
 
     deleteEvent(id) {
         this.#events = this.#events.filter(e => e.id !== id);
+        if (this.#currentEvent?.id === id) this.currentEvent = undefined;
         this.dispatchEvent(new CustomEvent("eventDeleted", { detail: id }));
     }
 
-    // === CRUD-Methoden für Tags ===
     addTag(tag) {
         this.#tags.push(tag);
         this.dispatchEvent(new CustomEvent("tagAdded", { detail: tag }));
     }
 
-    removeTag(id) {
-        this.#tags = this.#tags.filter(t => t.id !== id);
-        this.dispatchEvent(new CustomEvent("tagRemoved", { detail: id }));
+    /** true, wenn kein Event diesen Tag nutzt */
+    canDeleteTag(tagId) {
+        const idStr = String(tagId);
+        return !this.#events.some(ev =>
+            (ev.tags || []).some(t => String(t.id) === idStr)
+        );
+    }
+
+    /** returns boolean success */
+    removeTag(tagId) {
+        if (!this.canDeleteTag(tagId)) {
+            this.dispatchEvent(new CustomEvent("tagDeleteBlocked", { detail: tagId }));
+            return false;
+        }
+
+        const idStr = String(tagId);
+        this.#tags = this.#tags.filter(t => String(t.id) !== idStr);
+
+        // Safety: remove references from events (falls vorhanden)
+        this.#events = this.#events.map(ev => {
+            if (Array.isArray(ev.tags)) {
+                ev.tags = ev.tags.filter(t => String(t.id) !== idStr);
+            }
+            return ev;
+        });
+
+        this.dispatchEvent(new CustomEvent("tagRemoved", { detail: tagId }));
+        return true;
     }
 
     addParticipant(participant) {
@@ -65,52 +83,39 @@ export class EventModel extends EventTarget {
         this.dispatchEvent(new CustomEvent("participantAdded", { detail: participant }));
     }
 
-    // === JSON-Ladevorgang ===
-    #loadFromJSON() {
-        Promise.all([ //promise holt in json result und erst wenn das geladen ist
-            fetch("json/events.json").then(res => res.json()),
-            fetch("json/participants.json").then(res => res.json()),
-            fetch("json/tags.json").then(res => res.json())
-        ])
-            .then(([eventsData, participantsData, tagsData]) => {
-                // Teilnehmer laden
-                this.#participants = participantsData.map(p => new Participant(p));
+    async #loadFromJSON() {
+        try {
+            const [eventsData, participantsData, tagsData] = await Promise.all([
+                fetch("json/events.json").then(r => r.json()),
+                fetch("json/participants.json").then(r => r.json()),
+                fetch("json/tags.json").then(r => r.json())
+            ]);
 
-                // Tags laden
-                this.#tags = tagsData.map(t => new Tag(t));
+            this.#participants = participantsData.map(p => new Participant(p));
+            this.#tags = tagsData.map(t => new Tag(t));
 
-                // Events laden und Referenzen auflösen
-                this.#events = eventsData.map(e => {
-                    // Teilnehmer-IDs in Objekte umwandeln
-                    const participants = e.participants
-                        .map(id => this.#participants.find(p => p.id === id))
-                        .filter(p => p);
+            this.#events = eventsData.map(e => {
+                const participants = (e.participants || [])
+                    .map(id => this.#participants.find(p => p.id === id))
+                    .filter(Boolean);
 
-                    // Tag-Namen in Objekte umwandeln
-                    const tags = e.tags
-                        .map(name => this.#tags.find(t => t.name === name))
-                        .filter(t => t);
+                const tags = (e.tags || [])
+                    .map(name => this.#tags.find(t => t.name === name))
+                    .filter(Boolean);
 
-                    return new Event({
-                        ...e,
-                        participants,
-                        tags
-                    });
+                return new Event({
+                    ...e,
+                    participants,
+                    tags,
+                    image: e.image || ""
                 });
-            })
-            .then(() => {
-                //Wichtig, damit Views (event-list, tag-list, etc.) sich aktualisieren
-                this.dispatchEvent(new CustomEvent("dataLoaded"));
-                console.log("Daten aus JSON geladen:", this.#events.length, "Events gefunden");
-            })
-            .catch(err => {
-                console.error("Fehler beim Laden der JSON-Daten:", err);
             });
+
+            this.dispatchEvent(new CustomEvent("dataLoaded"));
+        } catch (err) {
+            console.error("Fehler beim Laden der JSON-Daten:", err);
+        }
     }
 }
 
-// Export des Models – außerhalb der Klasse
 export const eventModel = new EventModel();
-
-//Kontrolle
-console.log("EventModel geladen.");

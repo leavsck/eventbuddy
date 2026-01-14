@@ -1,4 +1,6 @@
 import { eventModel } from "./model/eventModel.js";
+import { showDanger, hideDanger, setDangerConfirm } from "./view/danger.js";
+
 
 export class Controller {
     constructor() {
@@ -70,12 +72,20 @@ export class Controller {
             this.setActiveButton("btn-new-event");
         });
 
-        // === Event-Liste → Löschen ===
+        // delete event aber mit der meldung ob ich wirklich löschen will
         list.addEventListener("delete-event", (e) => {
-            eventModel.deleteEvent(e.detail);
-            this.showSection("list");
-            this.setActiveButton("btn-all-events");
+            const idToDelete = e.detail;
+
+            setDangerConfirm(() => {
+                eventModel.deleteEvent(idToDelete);
+                hideDanger();
+                this.showSection("list");
+                this.setActiveButton("btn-all-events");
+            });
+
+            showDanger();
         });
+
 
         // === Formular → Speichern ===
         form.addEventListener("save-event", (e) => {
@@ -100,14 +110,23 @@ export class Controller {
             this.setActiveButton("btn-new-event");
         });
 
-        // === Detailansicht → Löschen ===
+
+        //delete mit meldung wenn ich in detailansicht bin
         detail.addEventListener("delete-current-event", (e) => {
-            eventModel.deleteEvent(e.detail);
-            this.showSection("list");
-            this.setActiveButton("btn-all-events");
+            const idToDelete = e.detail;
+
+            setDangerConfirm(() => {
+                eventModel.deleteEvent(idToDelete);
+                hideDanger();
+                this.showSection("list");
+                this.setActiveButton("btn-all-events");
+            });
+
+            showDanger();
         });
 
-        //bei event löschen wieder zurück zu listenansicht 
+
+        //bei event löschen wieder zurück zu listenansicht
         form.addEventListener("cancel-event-form", () => {
             this.showSection("list");
             this.setActiveButton("btn-all-events");

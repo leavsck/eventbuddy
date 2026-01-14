@@ -39,3 +39,58 @@
   filter: brightness(0.8);
   transform: scale(0.98);
 }
+
+.sidebar {
+  @include card;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.sidebar__header {
+  padding: 16px;
+  border-bottom: 1px solid var(--border);
+  font-weight: 600;
+}
+
+.sidebar__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+
+  /* WICHTIG */
+  flex: 1;
+}
+
+.sidebar__spacer {
+  flex: 1;
+}
+
+/* Standard Buttons */
+.sidebar__btn {
+  background: var(--primary);
+  color: white;
+  border: 0;
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover {
+    filter: brightness(0.95);
+  }
+}
+
+/* Logout Button extra Style */
+.sidebar__btn--logout {
+  background: var(--muted);
+  color: var(--fg);
+}
+
+/* Aktiver Sidebar Button */
+.sidebar__btn--active {
+  filter: brightness(0.8);
+  transform: scale(0.98);
+}
+
