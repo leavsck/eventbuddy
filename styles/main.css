@@ -8,7 +8,7 @@
   /* rosa für die buttons in der sidebar und filter :)) */
   --primary: #ec4899;
   --accent: #3b82f6;
-  /* 🌸 Detail Buttons (Light Mode) */
+  /* Detail Buttons (Light Mode) */
   --pink-light: #fbcfe8; /* sehr helles Rosa */
   --pink-dark: #9d174d; /* sehr dunkles Rosa */
 }
@@ -23,7 +23,7 @@
     /* bissi helleres rosa für buttons in sidebar und filter */
     --primary: #f472b6;
     --accent: #60a5fa;
-    /* 🌸 Detail Buttons (Dark Mode) */
+    /* Detail Buttons (Dark Mode) */
     --pink-light: #f472b6; /* etwas kräftiger im Dark Mode */
     --pink-dark: #831843; /* sehr dunkel, aber gut lesbar */
   }
@@ -168,7 +168,7 @@ body {
   transform: scale(0.98);
 }
 
-/* Primary = dein rosa (z.B. Tag hinzufügen / Event speichern) */
+/* Primary (z.B. Tag hinzufügen / Event speichern) */
 .btn-primary {
   background: var(--primary);
   color: #fff;
@@ -240,7 +240,7 @@ body {
   font-weight: 600;
 }
 
-/* ===== Alte Event Detail Klassen (falls du sie noch irgendwo nutzt) ===== */
+/* ===== Alte Event Detail Klassen  ===== */
 .event-detail {
   background: var(--bg-elev);
   border: 1px solid var(--border);
@@ -307,7 +307,7 @@ body {
   filter: brightness(0.95);
 }
 
-/* ===== Neue Event Detail View (Screenshot Layout) ===== */
+/* ===== Neue Event Detail View  ===== */
 .detail-wrap {
   padding: 24px;
 }
@@ -421,7 +421,7 @@ body {
   font-style: italic;
 }
 
-/* ===== Alte Form-Klassen (falls irgendwo verwendet) ===== */
+/* ===== Alte Form-Klassen ===== */
 .form {
   display: flex;
   flex-direction: column;
@@ -694,7 +694,7 @@ body {
   margin: 0;
 }
 
-/* Tag Cards (die du aktuell schon in forms drin hast) */
+/* Tag Cards */
 .tag-items {
   list-style: none;
   padding: 0;
