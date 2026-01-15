@@ -75,7 +75,7 @@ class EventForm extends HTMLElement {
 
           <div class="form-field">
             <label class="form-label">Bild-URL (optional)</label>
-            <input class="form-input" name="image" placeholder="z.B. img/event-bilder/party.jpg" value="${ev.image || ""}">
+            <input class="form-input" name="image" value="${ev.image || ""}">
           </div>
 
           <div class="form-field">
@@ -93,8 +93,8 @@ class EventForm extends HTMLElement {
           </div>
 
           <div class="form-actions">
-            <button type="button" class="btn btn-delete" id="btn-cancel">Event verwerfen</button>
-            <button type="submit" class="btn btn-primary">Event speichern</button>
+            <button type="button" class="btn btn-delete" id="btn-cancel">Änderungen verwerfen</button>
+            <button type="submit" class="btn btn-primary">Änderungen speichern</button>
           </div>
         </form>
       </section>

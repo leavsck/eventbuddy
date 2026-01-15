@@ -7,7 +7,7 @@
     "status": "geplant",
     "tags": ["Workshop"],
     "participants": [1, 2],
-    "image": "img/workshop.png"
+    "image": "img/event-bilder/workshop.jpeg"
   },
   {
     "id": 2,
@@ -16,6 +16,7 @@
     "location": "Büro A.101",
     "status": "abgeschlossen",
     "tags": ["Meeting"],
-    "participants": [3]
+    "participants": [3],
+    "image": "img/event-bilder/workshop.jpg"
   }
 ]

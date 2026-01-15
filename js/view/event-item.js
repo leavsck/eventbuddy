@@ -55,7 +55,7 @@ class EventItem extends HTMLElement {
 
             this.dispatchEvent(
                 new CustomEvent("show-event-detail", {
-                    detail: ev.id,        // nur ID (Übungsstyle)
+                    detail: ev.id,        // nur ID
                     bubbles: true,
                     composed: true,
                 })
