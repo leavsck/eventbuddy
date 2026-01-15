@@ -2,6 +2,16 @@
    filter.scss (Prototype Look)
    ================================ */
 
+/* ✅ WICHTIG: Hidden muss auch gegen #filter-section { display: ... } gewinnen */
+#filter-section.hidden {
+  display: none;
+}
+
+/* Optional: nur falls du generell hidden überall willst
+.hidden { display: none; }
+*/
+
+/* ---- Card ---- */
 .filter-card {
   background: rgba(255,255,255,0.04);
   border: 1px solid rgba(255,255,255,0.08);
@@ -16,7 +26,7 @@
   color: var(--fg);
 }
 
-/* 3 Spalten wie Prototyp */
+/* ---- Grid: 3 Spalten wie Prototyp ---- */
 .filter-card .filter-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(220px, 1fr));
@@ -29,6 +39,7 @@
   gap: 8px;
 }
 
+.filter-card .filter-label,
 .filter-card .filter-field > label {
   font-size: 13px;
   font-weight: 700;
@@ -36,14 +47,13 @@
   color: var(--fg);
 }
 
-/* ===== Dropdown als neutrales Input-Feld (wichtig: nicht pink) ===== */
+/* ---- Custom Dropdown wie neutrales Input-Feld ---- */
 .filter-card .filter-dd {
   position: relative;
   width: 100%;
 }
 
 .filter-card .filter-dd__btn {
-  /* diese Regeln müssen “gewinnen” */
   width: 100%;
   height: 48px;
   padding: 0 14px;
@@ -56,13 +66,11 @@
   border-radius: 10px;
   border: 1px solid rgba(255,255,255,0.14);
 
-  /* neutraler Hintergrund wie Form-Feld */
   background: rgba(255,255,255,0.06);
   color: var(--fg);
 
   font-weight: 700;
   cursor: pointer;
-
   box-shadow: none;
 }
 
@@ -84,7 +92,7 @@
   opacity: 0.6;
 }
 
-/* Dropdown Panel */
+/* ---- Dropdown Panel ---- */
 .filter-card .filter-dd__panel {
   display: none;
   position: absolute;
@@ -108,6 +116,7 @@
   gap: 8px;
 }
 
+/* ---- Actions (Filtern Button rechts unten) ---- */
 .filter-card .filter-actions {
   margin-top: 16px;
   display: flex;
@@ -131,7 +140,7 @@
   filter: brightness(1.06);
 }
 
-/* Responsive */
+/* ---- Responsive ---- */
 @media (max-width: 900px) {
   .filter-card .filter-grid {
     grid-template-columns: 1fr;
