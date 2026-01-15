@@ -15,7 +15,6 @@ class EventList extends HTMLElement {
     connectedCallback() {
         this.render();
 
-        // ✅ Übungsstyle: ein zentrales "Model changed"
         eventModel.addEventListener("eventsChanged", this._rerender);
 
         document.addEventListener("filtersChanged", (e) => {

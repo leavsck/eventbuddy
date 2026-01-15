@@ -1,5 +1,3 @@
-// js/view/event-item.js
-
 class EventItem extends HTMLElement {
     #event;
 
@@ -18,7 +16,7 @@ class EventItem extends HTMLElement {
 
         const ev = this.#event;
 
-        // optionales Thumbnail
+        //Thumbnail für img
         const thumb = ev.image
             ? `<img class="event-thumb" src="${ev.image}" alt="Event Bild">`
             : "";

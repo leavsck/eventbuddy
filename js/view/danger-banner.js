@@ -1,4 +1,3 @@
-// js/view/danger-banner.js
 class DangerBanner extends HTMLElement {
     #confirmFn = null;
 
@@ -36,9 +35,6 @@ class DangerBanner extends HTMLElement {
         </div>
       </section>
     `;
-
-        // Root muss wie früher fixed oben sein -> wir nutzen genau deine CSS-ID über :host
-        // Die eigentliche Positionierung macht CSS (siehe unten in styles/_danger.scss)
 
         this.shadowRoot.getElementById("btn-cancel")?.addEventListener("click", () => {
             this.hide();

@@ -7,7 +7,7 @@ export default class Event {
     #status;
     #tags;
     #participants;
-    #image; // optional
+    #image;
 
     constructor({
                     id,

@@ -93,8 +93,8 @@ class EventForm extends HTMLElement {
           </div>
 
           <div class="form-actions">
-            <button type="button" class="btn btn-delete" id="btn-cancel">Änderungen verwerfen</button>
-            <button type="submit" class="btn btn-primary">Änderungen speichern</button>
+            <button type="button" class="btn btn-delete" id="btn-cancel">Event verwerfen</button>
+            <button type="submit" class="btn btn-primary">Event speichern</button>
           </div>
         </form>
       </section>
@@ -111,7 +111,7 @@ class EventForm extends HTMLElement {
             const fd = new FormData(form);
             const data = Object.fromEntries(fd.entries());
 
-            // Pflicht-Validierung (zusätzlich zu required)
+            // Pflicht-Validierung
             const title = (data.title || "").trim();
             const location = (data.location || "").trim();
             const dateTime = data.dateTime;

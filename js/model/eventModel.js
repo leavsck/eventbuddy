@@ -3,7 +3,7 @@ import Participant from "./participant.js";
 import Tag from "./tag.js";
 
 export class EventModel extends EventTarget {
-    #events;              // Map statt Array
+    #events;
     #participants;
     #tags;
     #currentEvent;
@@ -18,18 +18,18 @@ export class EventModel extends EventTarget {
         this.#loadFromJSON();
     }
 
-    // Übungsstyle: Liste/Map getter
+    // Liste/Map getter
     get events() { return Array.from(this.#events.values()); }
     get participants() { return this.#participants; }
     get tags() { return this.#tags; }
     get currentEvent() { return this.#currentEvent; }
 
-    // Übungsstyle: getById
+    // getById
     getEventById(id) {
         return this.#events.get(Number(id));
     }
 
-    // Übungsstyle: changeX() setzt current im Model
+    //changeX() setzt current im Model
     changeEvent(newEventId) {
         const ev = this.getEventById(newEventId);
         this.#currentEvent = ev;
@@ -102,7 +102,7 @@ export class EventModel extends EventTarget {
         const idStr = String(tagId);
         this.#tags = this.#tags.filter(t => String(t.id) !== idStr);
 
-        // safety: referenzen aus events entfernen
+        //referenzen aus events entfernen
         for (const ev of this.events) {
             const tags = ev.tags || [];
             ev.tags = tags.filter(t => {

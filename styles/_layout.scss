@@ -35,7 +35,7 @@ body {
   color: var(--fg);
 }
 
-/* ===== Filter Section ===== */
+/* Filter Section */
 #filter-section {
   @include card;
   display: flex;
@@ -66,7 +66,7 @@ body {
   }
 }
 
-/* ===== Scrollbars ===== */
+/* Scrollbars  */
 .messages::-webkit-scrollbar,
 .event-list::-webkit-scrollbar {
   width: 8px;

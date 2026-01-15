@@ -1,4 +1,3 @@
-// js/view/filter.js
 import { eventModel } from "../model/eventModel.js";
 
 const state = {

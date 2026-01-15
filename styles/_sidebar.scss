@@ -58,8 +58,6 @@
   flex-direction: column;
   gap: 12px;
   padding: 16px;
-
-  /* WICHTIG */
   flex: 1;
 }
 
@@ -80,12 +78,6 @@
   &:hover {
     filter: brightness(0.95);
   }
-}
-
-/* Logout Button extra Style */
-.sidebar__btn--logout {
-  background: var(--muted);
-  color: var(--fg);
 }
 
 /* Aktiver Sidebar Button */

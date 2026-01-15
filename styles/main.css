@@ -8,9 +8,9 @@
   /* rosa für die buttons in der sidebar und filter :)) */
   --primary: #ec4899;
   --accent: #3b82f6;
-  /* 🌸 Detail Buttons (Light Mode) */
-  --pink-light: #fbcfe8; /* sehr helles Rosa */
-  --pink-dark: #9d174d; /* sehr dunkles Rosa */
+  /* Detail Buttons (Light Mode) */
+  --pink-light: #fbcfe8;
+  --pink-dark: #9d174d;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -23,9 +23,9 @@
     /* bissi helleres rosa für buttons in sidebar und filter */
     --primary: #f472b6;
     --accent: #60a5fa;
-    /* 🌸 Detail Buttons (Dark Mode) */
-    --pink-light: #f472b6; /* etwas kräftiger im Dark Mode */
-    --pink-dark: #831843; /* sehr dunkel, aber gut lesbar */
+    /* Detail Buttons (Dark Mode) */
+    --pink-light: #f472b6;
+    --pink-dark: #831843;
   }
 }
 * {
@@ -64,7 +64,7 @@ body {
   color: var(--fg);
 }
 
-/* ===== Filter Section ===== */
+/* Filter Section */
 #filter-section {
   background: var(--bg-elev);
   border: 1px solid var(--border);
@@ -94,7 +94,7 @@ body {
   filter: brightness(0.95);
 }
 
-/* ===== Scrollbars ===== */
+/* Scrollbars  */
 .messages::-webkit-scrollbar,
 .event-list::-webkit-scrollbar {
   width: 8px;
@@ -167,7 +167,6 @@ body {
   flex-direction: column;
   gap: 12px;
   padding: 16px;
-  /* WICHTIG */
   flex: 1;
 }
 
@@ -189,20 +188,12 @@ body {
   filter: brightness(0.95);
 }
 
-/* Logout Button extra Style */
-.sidebar__btn--logout {
-  background: var(--muted);
-  color: var(--fg);
-}
-
 /* Aktiver Sidebar Button */
 .sidebar__btn--active {
   filter: brightness(0.8);
   transform: scale(0.98);
 }
 
-/* styles/_buttons.scss */
-/* ===== Shared Button System ===== */
 .btn {
   border: none;
   border-radius: 12px;
@@ -222,13 +213,13 @@ body {
   transform: scale(0.98);
 }
 
-/* Primary = dein rosa (z.B. Tag hinzufügen / Event speichern) */
+/* Primary buttons  */
 .btn-primary {
   background: var(--primary);
   color: #fff;
 }
 
-/* Secondary = neutral (Event verwerfen) */
+/* Secondary */
 .btn-secondary {
   background: var(--muted);
   color: var(--fg);
@@ -294,7 +285,6 @@ body {
   font-weight: 600;
 }
 
-/* ===== Event Detail View (neu, bereinigt – ohne Banner & ohne alte Klassen) ===== */
 .detail-wrap {
   padding: 24px;
 }
@@ -392,62 +382,6 @@ body {
   font-style: italic;
 }
 
-/* ===== Alte Form-Klassen (falls irgendwo verwendet) ===== */
-.form {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 16px;
-}
-
-.form__label {
-  font-weight: 600;
-}
-
-.form__input,
-.form__select,
-.form__textarea {
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 10px;
-  background: transparent;
-  color: inherit;
-  font-family: inherit;
-}
-.form__input:focus,
-.form__select:focus,
-.form__textarea:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.35);
-}
-
-.form__actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-  margin-top: 8px;
-}
-
-.form__btn {
-  border: 0;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  padding: 10px 16px;
-}
-.form__btn--primary {
-  background: var(--primary);
-  color: #fff;
-}
-.form__btn--secondary {
-  background: var(--border);
-  color: var(--fg);
-}
-.form__btn:hover {
-  filter: brightness(0.95);
-}
-
-/* ===== Neues Card/Form Styling ===== */
 .form-card {
   background: var(--bg-elev);
   color: var(--fg);
@@ -518,18 +452,11 @@ body {
   margin-top: 10px;
 }
 
-/* ================================
-   filter.scss (Prototype Look)
-   ================================ */
-/* ✅ WICHTIG: Hidden muss auch gegen #filter-section { display: ... } gewinnen */
 #filter-section.hidden {
   display: none;
 }
 
-/* Optional: nur falls du generell hidden überall willst
-.hidden { display: none; }
-*/
-/* ---- Card ---- */
+/* hintergrund also card  */
 .filter-card {
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -544,7 +471,6 @@ body {
   color: var(--fg);
 }
 
-/* ---- Grid: 3 Spalten wie Prototyp ---- */
 .filter-card .filter-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(220px, 1fr));
@@ -565,7 +491,7 @@ body {
   color: var(--fg);
 }
 
-/* ---- Custom Dropdown wie neutrales Input-Feld ---- */
+/*Dropdown (dd) */
 .filter-card .filter-dd {
   position: relative;
   width: 100%;
@@ -606,7 +532,7 @@ body {
   opacity: 0.6;
 }
 
-/* ---- Dropdown Panel ---- */
+/* Dropdown Panel */
 .filter-card .filter-dd__panel {
   display: none;
   position: absolute;
@@ -628,7 +554,7 @@ body {
   gap: 8px;
 }
 
-/* ---- Actions (Filtern Button rechts unten) ---- */
+/* Filtern Button rechts unten */
 .filter-card .filter-actions {
   margin-top: 16px;
   display: flex;
@@ -650,7 +576,7 @@ body {
   filter: brightness(1.06);
 }
 
-/* ---- Responsive ---- */
+/* Responsive */
 @media (max-width: 900px) {
   .filter-card .filter-grid {
     grid-template-columns: 1fr;
@@ -662,7 +588,6 @@ body {
     width: 100%;
   }
 }
-/* styles/_participants.scss */
 .list-title {
   margin-top: 18px;
   margin-bottom: 10px;
@@ -671,7 +596,7 @@ body {
   opacity: 0.85;
 }
 
-/* keine Punkte in der Teilnehmerliste */
+/* keine Punkte in der Teilnehmerliste, wegen ul aus html eig da */
 .participant-items {
   list-style: none;
   padding-left: 0;
@@ -682,8 +607,8 @@ body {
   background: var(--bg-elev);
   border: 1px solid var(--border);
   border-radius: 10px;
-  padding: 12px 14px; /* gleich wie tags */
-  min-height: 86px; /* optional – nur wenn du 1:1 gleiche Höhe willst */
+  padding: 12px 14px;
+  min-height: 86px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -713,7 +638,6 @@ body {
   gap: 10px;
 }
 
-/* styles/_tags.scss */
 /* keine Punkte in der Tagliste */
 .tag-list ul {
   list-style: none;
@@ -721,7 +645,7 @@ body {
   margin: 0;
 }
 
-/* Tag Cards (die du aktuell schon in forms drin hast) */
+/* Tag Cards */
 .tag-items {
   list-style: none;
   padding: 0;
@@ -756,8 +680,6 @@ body {
   filter: brightness(0.92);
 }
 
-/* styles/_danger.scss */
-/* Das Web Component selbst ist "fixed" */
 danger-banner {
   position: fixed;
   top: 16px;

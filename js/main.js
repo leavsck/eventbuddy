@@ -1,4 +1,3 @@
-// js/main.js
 import { controller } from "./controller.js";
 
 // Views importieren

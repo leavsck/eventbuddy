@@ -1,6 +1,3 @@
-/* styles/_buttons.scss */
-
-/* ===== Shared Button System ===== */
 .btn {
   border: none;
   border-radius: 12px;
@@ -22,13 +19,13 @@
   }
 }
 
-/* Primary = dein rosa (z.B. Tag hinzufügen / Event speichern) */
+/* Primary buttons  */
 .btn-primary {
   background: var(--primary);
   color: #fff;
 }
 
-/* Secondary = neutral (Event verwerfen) */
+/* Secondary */
 .btn-secondary {
   background: var(--muted);
   color: var(--fg);

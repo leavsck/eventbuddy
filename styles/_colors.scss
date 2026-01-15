@@ -9,9 +9,9 @@
   --primary: #ec4899;
   --accent: #3b82f6;
 
-  /* 🌸 Detail Buttons (Light Mode) */
-  --pink-light: #fbcfe8;  /* sehr helles Rosa */
-  --pink-dark:  #9d174d;  /* sehr dunkles Rosa */
+  /* Detail Buttons (Light Mode) */
+  --pink-light: #fbcfe8;
+  --pink-dark:  #9d174d;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -26,8 +26,8 @@
     --primary: #f472b6;
     --accent: #60a5fa;
 
-    /* 🌸 Detail Buttons (Dark Mode) */
-    --pink-light: #f472b6; /* etwas kräftiger im Dark Mode */
-    --pink-dark:  #831843; /* sehr dunkel, aber gut lesbar */
+    /* Detail Buttons (Dark Mode) */
+    --pink-light: #f472b6;
+    --pink-dark:  #831843;
   }
 }
