@@ -11,4 +11,18 @@
 @use "tags";
 @use "danger";
 
+/* styling für bilder */
+.event-list__item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.event-thumb {
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
 

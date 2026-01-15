@@ -14,59 +14,7 @@
 
 <body class="app">
 
-<!-- ===== AUTH (Login/Register) ===== -->
-<section id="auth-section" style="max-width: 520px; margin: 40px auto; display:none;">
-    <div class="form-card">
-        <div class="form-card__header">
-            <h2 class="form-card__title">EventBuddy Login</h2>
-        </div>
-
-        <form id="login-form" class="form-grid">
-            <div class="form-field">
-                <label class="form-label">E-Mail</label>
-                <input class="form-input" type="email" name="email" required>
-            </div>
-
-            <div class="form-field">
-                <label class="form-label">Passwort</label>
-                <input class="form-input" type="password" name="password" required minlength="4">
-            </div>
-
-            <div class="form-actions">
-                <button class="btn btn-primary" type="submit">Anmelden</button>
-            </div>
-        </form>
-
-        <hr style="opacity:.2; margin:18px 0;">
-
-        <h3 style="margin:0 0 10px 0;">Registrieren</h3>
-        <form id="register-form" class="form-grid">
-            <div class="form-field">
-                <label class="form-label">Name</label>
-                <input class="form-input" type="text" name="name" required>
-            </div>
-
-            <div class="form-field">
-                <label class="form-label">E-Mail</label>
-                <input class="form-input" type="email" name="email" required>
-            </div>
-
-            <div class="form-field">
-                <label class="form-label">Passwort</label>
-                <input class="form-input" type="password" name="password" required minlength="4">
-            </div>
-
-            <div class="form-actions">
-                <button class="btn btn-primary" type="submit">Registrieren</button>
-            </div>
-        </form>
-
-        <p id="auth-error" style="margin-top:12px; opacity:.85;"></p>
-    </div>
-</section>
-
-<!-- ===== APP (dein bisheriges Layout) ===== -->
-<div id="app-section" class="layout" style="display:none;">
+<div id="app-section" class="layout">
     <!-- === Sidebar === -->
     <aside class="sidebar">
         <header class="sidebar__header">
@@ -79,16 +27,9 @@
             <button class="sidebar__btn" id="btn-new-participant">Teilnehmer anlegen</button>
             <button class="sidebar__btn" id="btn-manage-tags">Tags verwalten</button>
 
-            <!-- Spacer -->
             <div class="sidebar__spacer"></div>
-
-            <!-- Logout ganz unten -->
-            <button class="sidebar__btn sidebar__btn--logout" id="btn-logout">
-                Logout
-            </button>
         </nav>
     </aside>
-
 
     <!-- === Hauptinhalt === -->
     <main class="main">
@@ -123,27 +64,8 @@
             <button id="btn-apply-filter">Filtern</button>
         </section>
 
-        <!-- DANGER / LÖSCH-WARNUNG -->
-        <section id="danger-section">
-            <div class="danger-bar">
-                <div class="danger-bar__left">
-                    <div class="danger-bar__icon">!</div>
+        <danger-banner></danger-banner>
 
-                    <div>
-                        <div class="danger-bar__title" id="danger-title">Achtung: Löschvorgang!</div>
-                        <div class="danger-bar__desc" id="danger-desc">
-                            Sie sind dabei, ausgewählte Tags und/oder Events unwiderruflich zu löschen.
-                            Dieser Vorgang kann nicht rückgängig gemacht werden.
-                        </div>
-                    </div>
-                </div>
-
-                <div class="danger-bar__actions">
-                    <button class="btn btn-cancel" id="btn-cancel-delete">Abbrechen</button>
-                    <button class="btn btn-danger" id="btn-confirm-delete">Endgültig Löschen</button>
-                </div>
-            </div>
-        </section>
 
         <!-- === Views (Web Components) === -->
         <section id="event-list-section">
@@ -168,7 +90,6 @@
     </main>
 </div>
 
-<!-- === Hauptscript (muss als Modul geladen werden) === -->
 <script type="module" src="js/main.js"></script>
 </body>
 </html>

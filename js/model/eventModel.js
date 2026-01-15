@@ -3,44 +3,73 @@ import Participant from "./participant.js";
 import Tag from "./tag.js";
 
 export class EventModel extends EventTarget {
-    #events = [];
-    #participants = [];
-    #tags = [];
-    #currentEvent = undefined;
+    #events;              // Map statt Array
+    #participants;
+    #tags;
+    #currentEvent;
 
     constructor() {
         super();
+        this.#events = new Map();
+        this.#participants = [];
+        this.#tags = [];
+        this.#currentEvent = undefined;
+
         this.#loadFromJSON();
     }
 
-    get events() { return this.#events; }
+    // Übungsstyle: Liste/Map getter
+    get events() { return Array.from(this.#events.values()); }
     get participants() { return this.#participants; }
     get tags() { return this.#tags; }
     get currentEvent() { return this.#currentEvent; }
 
-    set currentEvent(ev) {
-        this.#currentEvent = ev;
-        this.dispatchEvent(new CustomEvent("eventSelected", { detail: ev }));
+    // Übungsstyle: getById
+    getEventById(id) {
+        return this.#events.get(Number(id));
     }
 
+    // Übungsstyle: changeX() setzt current im Model
+    changeEvent(newEventId) {
+        const ev = this.getEventById(newEventId);
+        this.#currentEvent = ev;
+        this.dispatchEvent(new CustomEvent("eventSelected", { detail: ev }));
+        return ev;
+    }
+
+    // CRUD -> immer auch "eventsChanged" dispatchen (ein zentrales Update)
     addEvent(ev) {
-        this.#events.push(ev);
+        this.#events.set(Number(ev.id), ev);
         this.dispatchEvent(new CustomEvent("eventAdded", { detail: ev }));
+        this.dispatchEvent(new CustomEvent("eventsChanged"));
     }
 
     updateEvent(updatedEvent) {
-        const idx = this.#events.findIndex(e => e.id === updatedEvent.id);
-        if (idx >= 0) {
-            this.#events[idx] = updatedEvent;
-            if (this.#currentEvent?.id === updatedEvent.id) this.#currentEvent = updatedEvent;
-            this.dispatchEvent(new CustomEvent("eventUpdated", { detail: updatedEvent }));
+        const id = Number(updatedEvent.id);
+        if (!this.#events.has(id)) return;
+
+        this.#events.set(id, updatedEvent);
+
+        if (this.#currentEvent?.id === updatedEvent.id) {
+            this.#currentEvent = updatedEvent;
+            this.dispatchEvent(new CustomEvent("eventSelected", { detail: updatedEvent }));
         }
+
+        this.dispatchEvent(new CustomEvent("eventUpdated", { detail: updatedEvent }));
+        this.dispatchEvent(new CustomEvent("eventsChanged"));
     }
 
     deleteEvent(id) {
-        this.#events = this.#events.filter(e => e.id !== id);
-        if (this.#currentEvent?.id === id) this.currentEvent = undefined;
-        this.dispatchEvent(new CustomEvent("eventDeleted", { detail: id }));
+        const numId = Number(id);
+        this.#events.delete(numId);
+
+        if (this.#currentEvent?.id === numId) {
+            this.#currentEvent = undefined;
+            this.dispatchEvent(new CustomEvent("eventSelected", { detail: undefined }));
+        }
+
+        this.dispatchEvent(new CustomEvent("eventDeleted", { detail: numId }));
+        this.dispatchEvent(new CustomEvent("eventsChanged"));
     }
 
     addTag(tag) {
@@ -48,14 +77,11 @@ export class EventModel extends EventTarget {
         this.dispatchEvent(new CustomEvent("tagAdded", { detail: tag }));
     }
 
-    /** Tag darf nur gelöscht werden, wenn KEIN Event ihn nutzt */
     canDeleteTag(tagId) {
         const idStr = String(tagId);
 
-        return !this.#events.some(ev => {
+        return !this.events.some(ev => {
             const tags = ev.tags || [];
-
-            // tags können Tag-Objekte ODER Strings sein → beides abfangen
             return tags.some(t => {
                 if (t && typeof t === "object" && "id" in t) return String(t.id) === idStr;
                 if (typeof t === "string") {
@@ -67,7 +93,6 @@ export class EventModel extends EventTarget {
         });
     }
 
-    /** returns boolean (true = gelöscht, false = blockiert) */
     removeTag(tagId) {
         if (!this.canDeleteTag(tagId)) {
             this.dispatchEvent(new CustomEvent("tagDeleteBlocked", { detail: tagId }));
@@ -75,26 +100,21 @@ export class EventModel extends EventTarget {
         }
 
         const idStr = String(tagId);
-
-        // aus tag-liste entfernen
         this.#tags = this.#tags.filter(t => String(t.id) !== idStr);
 
-        // referenzen aus events entfernen (safety)
-        this.#events = this.#events.map(ev => {
+        // safety: referenzen aus events entfernen
+        for (const ev of this.events) {
             const tags = ev.tags || [];
             ev.tags = tags.filter(t => {
                 if (t && typeof t === "object" && "id" in t) return String(t.id) !== idStr;
-                if (typeof t === "string") {
-                    const tagObj = this.#tags.find(x => x.name === t);
-                    // wenn tagObj nicht mehr existiert, bleibt string evtl. übrig – entfernen wir
-                    return tagObj ? String(tagObj.id) !== idStr : false;
-                }
+                if (typeof t === "string") return false;
                 return true;
             });
-            return ev;
-        });
+            this.#events.set(Number(ev.id), ev);
+        }
 
         this.dispatchEvent(new CustomEvent("tagRemoved", { detail: tagId }));
+        this.dispatchEvent(new CustomEvent("eventsChanged"));
         return true;
     }
 
@@ -114,7 +134,8 @@ export class EventModel extends EventTarget {
             this.#participants = participantsData.map(p => new Participant(p));
             this.#tags = tagsData.map(t => new Tag(t));
 
-            this.#events = eventsData.map(e => {
+            // events -> Map befüllen
+            for (const e of eventsData) {
                 const participants = (e.participants || [])
                     .map(id => this.#participants.find(p => p.id === id))
                     .filter(Boolean);
@@ -123,15 +144,18 @@ export class EventModel extends EventTarget {
                     .map(name => this.#tags.find(t => t.name === name))
                     .filter(Boolean);
 
-                return new Event({
+                const ev = new Event({
                     ...e,
                     participants,
                     tags,
                     image: e.image || ""
                 });
-            });
+
+                this.#events.set(Number(ev.id), ev);
+            }
 
             this.dispatchEvent(new CustomEvent("dataLoaded"));
+            this.dispatchEvent(new CustomEvent("eventsChanged"));
         } catch (err) {
             console.error("Fehler beim Laden der JSON-Daten:", err);
         }

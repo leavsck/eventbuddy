@@ -1,4 +1,4 @@
-import { eventModel } from "../model/eventModel.js";
+// js/view/event-item.js
 
 class EventItem extends HTMLElement {
     #event;
@@ -18,10 +18,17 @@ class EventItem extends HTMLElement {
 
         const ev = this.#event;
 
+        // optionales Thumbnail
+        const thumb = ev.image
+            ? `<img class="event-thumb" src="${ev.image}" alt="Event Bild">`
+            : "";
+
         this.shadowRoot.innerHTML = `
       <link rel="stylesheet" href="./styles/main.css">
 
       <li class="event-list__item" data-id="${ev.id}" tabindex="0">
+        ${thumb}
+
         <div class="event-list__meta">
           <div class="event-list__title">${ev.title}</div>
           <div class="event-list__date">${new Date(ev.dateTime).toLocaleString()}</div>
@@ -38,37 +45,41 @@ class EventItem extends HTMLElement {
       </li>
     `;
 
-        // Klick auf Item → Detail anzeigen (aber nicht, wenn Button gedrückt)
-        this.shadowRoot.querySelector(".event-list__item").addEventListener("click", (e) => {
+        const li = this.shadowRoot.querySelector(".event-list__item");
+        const btnEdit = this.shadowRoot.querySelector(".btn-edit");
+        const btnDelete = this.shadowRoot.querySelector(".btn-delete");
+
+        // Klick auf List-Item → Detailansicht
+        li?.addEventListener("click", (e) => {
             if (e.target.closest("button")) return;
 
             this.dispatchEvent(
                 new CustomEvent("show-event-detail", {
-                    detail: this.#event,
+                    detail: ev.id,        // nur ID (Übungsstyle)
                     bubbles: true,
-                    composed: true
+                    composed: true,
                 })
             );
         });
 
         // Bearbeiten
-        this.shadowRoot.querySelector(".btn-edit").addEventListener("click", () => {
+        btnEdit?.addEventListener("click", () => {
             this.dispatchEvent(
                 new CustomEvent("edit-event", {
-                    detail: this.#event,
+                    detail: ev.id,        // nur ID
                     bubbles: true,
-                    composed: true
+                    composed: true,
                 })
             );
         });
 
         // Löschen
-        this.shadowRoot.querySelector(".btn-delete").addEventListener("click", () => {
+        btnDelete?.addEventListener("click", () => {
             this.dispatchEvent(
                 new CustomEvent("delete-event", {
-                    detail: this.#event.id,
+                    detail: ev.id,
                     bubbles: true,
-                    composed: true
+                    composed: true,
                 })
             );
         });

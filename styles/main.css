@@ -781,7 +781,8 @@ body {
 }
 
 /* styles/_danger.scss */
-#danger-section {
+/* Das Web Component selbst ist "fixed" */
+danger-banner {
   position: fixed;
   top: 16px;
   left: 50%;
@@ -793,7 +794,8 @@ body {
   transition: opacity 180ms ease, transform 220ms ease;
 }
 
-#danger-section.is-visible {
+/* Sichtbar */
+danger-banner.is-visible {
   opacity: 1;
   pointer-events: auto;
   transform: translateX(-50%) translateY(0);
@@ -809,6 +811,64 @@ body {
   border: 1px solid var(--border);
   background: var(--bg-elev);
   box-shadow: 0 16px 50px rgba(0, 0, 0, 0.35);
+}
+
+.danger-bar__left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.danger-bar__icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: 2px solid var(--fg);
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+}
+
+.danger-bar__title {
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+
+.danger-bar__desc {
+  font-size: 13px;
+  opacity: 0.75;
+  max-width: 640px;
+}
+
+.danger-bar__actions {
+  display: flex;
+  gap: 12px;
+}
+
+/* Buttons */
+.btn-cancel {
+  background: var(--muted);
+  color: var(--fg);
+}
+
+.btn-danger {
+  background: #dc2626;
+  color: #fff;
+}
+
+/* styling für bilder */
+.event-list__item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.event-thumb {
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid var(--border);
 }
 
 /*# sourceMappingURL=main.css.map */

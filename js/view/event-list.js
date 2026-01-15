@@ -7,15 +7,16 @@ class EventList extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({ mode: "open" });
+
+        // optional clean
+        this._rerender = () => this.render();
     }
 
     connectedCallback() {
         this.render();
 
-        eventModel.addEventListener("dataLoaded", () => this.render());
-        eventModel.addEventListener("eventAdded", () => this.render());
-        eventModel.addEventListener("eventDeleted", () => this.render());
-        eventModel.addEventListener("eventUpdated", () => this.render());
+        // ✅ Übungsstyle: ein zentrales "Model changed"
+        eventModel.addEventListener("eventsChanged", this._rerender);
 
         document.addEventListener("filtersChanged", (e) => {
             this.#filters = e.detail;
@@ -26,19 +27,16 @@ class EventList extends HTMLElement {
     #matchesFilters(ev) {
         const { statuses, participantIds, tagIds } = this.#filters;
 
-        // Status (multi)
         if (statuses?.length) {
             if (!statuses.includes(ev.status)) return false;
         }
 
-        // Teilnehmer (OR-Logik)
         if (participantIds?.length) {
             const eventParticipantIds = (ev.participants || []).map(p => String(p.id));
             const ok = participantIds.some(id => eventParticipantIds.includes(String(id)));
             if (!ok) return false;
         }
 
-        // Tags (OR-Logik)
         if (tagIds?.length) {
             const eventTagIds = (ev.tags || []).map(t => String(t.id));
             const ok = tagIds.some(id => eventTagIds.includes(String(id)));
