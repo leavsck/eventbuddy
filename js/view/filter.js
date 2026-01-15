@@ -1,3 +1,4 @@
+// js/view/filter.js
 import { eventModel } from "../model/eventModel.js";
 
 const state = {
@@ -37,12 +38,16 @@ function renderStatusCheckboxes() {
       <button type="button" class="filter-link" id="s-reset">Reset</button>
     </div>
 
-    ${statuses.map(s => `
+    ${statuses
+        .map(
+            (s) => `
       <label class="filter-check">
         <input type="checkbox" value="${s.id}" ${state.selectedStatuses.has(s.id) ? "checked" : ""}>
         <span>${s.label}</span>
       </label>
-    `).join("")}
+    `
+        )
+        .join("")}
   `;
 
     box.querySelector("#s-reset")?.addEventListener("click", () => {
@@ -51,7 +56,7 @@ function renderStatusCheckboxes() {
         updateLabels();
     });
 
-    box.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+    box.querySelectorAll('input[type="checkbox"]').forEach((cb) => {
         cb.addEventListener("change", () => {
             const id = cb.value;
             cb.checked ? state.selectedStatuses.add(id) : state.selectedStatuses.delete(id);
@@ -74,12 +79,16 @@ function renderParticipantCheckboxes() {
       <button type="button" class="filter-link" id="p-reset">Reset</button>
     </div>
 
-    ${items.map(p => `
+    ${items
+        .map(
+            (p) => `
       <label class="filter-check">
         <input type="checkbox" value="${p.id}" ${state.selectedParticipantIds.has(String(p.id)) ? "checked" : ""}>
         <span>${p.name}</span>
       </label>
-    `).join("")}
+    `
+        )
+        .join("")}
   `;
 
     box.querySelector("#p-reset")?.addEventListener("click", () => {
@@ -88,7 +97,7 @@ function renderParticipantCheckboxes() {
         updateLabels();
     });
 
-    box.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+    box.querySelectorAll('input[type="checkbox"]').forEach((cb) => {
         cb.addEventListener("change", () => {
             const id = String(cb.value);
             cb.checked ? state.selectedParticipantIds.add(id) : state.selectedParticipantIds.delete(id);
@@ -111,12 +120,16 @@ function renderTagCheckboxes() {
       <button type="button" class="filter-link" id="t-reset">Reset</button>
     </div>
 
-    ${tags.map(t => `
+    ${tags
+        .map(
+            (t) => `
       <label class="filter-check">
         <input type="checkbox" value="${t.id}" ${state.selectedTagIds.has(String(t.id)) ? "checked" : ""}>
         <span>${t.name}</span>
       </label>
-    `).join("")}
+    `
+        )
+        .join("")}
   `;
 
     box.querySelector("#t-reset")?.addEventListener("click", () => {
@@ -125,7 +138,7 @@ function renderTagCheckboxes() {
         updateLabels();
     });
 
-    box.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+    box.querySelectorAll('input[type="checkbox"]').forEach((cb) => {
         cb.addEventListener("change", () => {
             const id = String(cb.value);
             cb.checked ? state.selectedTagIds.add(id) : state.selectedTagIds.delete(id);
@@ -137,47 +150,59 @@ function renderTagCheckboxes() {
 }
 
 function applyFilters() {
-    document.dispatchEvent(new CustomEvent("filtersChanged", {
-        detail: {
-            statuses: Array.from(state.selectedStatuses),
-            participantIds: Array.from(state.selectedParticipantIds),
-            tagIds: Array.from(state.selectedTagIds),
-        }
-    }));
+    document.dispatchEvent(
+        new CustomEvent("filtersChanged", {
+            detail: {
+                statuses: Array.from(state.selectedStatuses),
+                participantIds: Array.from(state.selectedParticipantIds),
+                tagIds: Array.from(state.selectedTagIds),
+            },
+        })
+    );
 }
 
 function initDropdowns() {
-    const ddS = document.getElementById("dd-status");
-    const ddP = document.getElementById("dd-participants");
-    const ddT = document.getElementById("dd-tags");
+    const wrapS = document.getElementById("dd-status");
+    const wrapP = document.getElementById("dd-participants");
+    const wrapT = document.getElementById("dd-tags");
 
-    ddS?.querySelector(".filter-dd__btn")?.addEventListener("click", (e) => {
+    const ddS = wrapS?.querySelector(".filter-dd");
+    const ddP = wrapP?.querySelector(".filter-dd");
+    const ddT = wrapT?.querySelector(".filter-dd");
+
+    const btnS = ddS?.querySelector(".filter-dd__btn");
+    const btnP = ddP?.querySelector(".filter-dd__btn");
+    const btnT = ddT?.querySelector(".filter-dd__btn");
+
+    btnS?.addEventListener("click", (e) => {
         e.stopPropagation();
-        setDdOpen(ddS, !ddS.classList.contains("is-open"));
+        ddS && setDdOpen(ddS, !ddS.classList.contains("is-open"));
         ddP && setDdOpen(ddP, false);
         ddT && setDdOpen(ddT, false);
     });
 
-    ddP?.querySelector(".filter-dd__btn")?.addEventListener("click", (e) => {
+    btnP?.addEventListener("click", (e) => {
         e.stopPropagation();
-        setDdOpen(ddP, !ddP.classList.contains("is-open"));
+        ddP && setDdOpen(ddP, !ddP.classList.contains("is-open"));
         ddS && setDdOpen(ddS, false);
         ddT && setDdOpen(ddT, false);
     });
 
-    ddT?.querySelector(".filter-dd__btn")?.addEventListener("click", (e) => {
+    btnT?.addEventListener("click", (e) => {
         e.stopPropagation();
-        setDdOpen(ddT, !ddT.classList.contains("is-open"));
+        ddT && setDdOpen(ddT, !ddT.classList.contains("is-open"));
         ddS && setDdOpen(ddS, false);
         ddP && setDdOpen(ddP, false);
     });
 
+    // Klick außerhalb schließt alles
     document.addEventListener("click", () => {
         ddS && setDdOpen(ddS, false);
         ddP && setDdOpen(ddP, false);
         ddT && setDdOpen(ddT, false);
     });
 
+    // Klick im Panel soll NICHT schließen
     ddS?.querySelector(".filter-dd__panel")?.addEventListener("click", (e) => e.stopPropagation());
     ddP?.querySelector(".filter-dd__panel")?.addEventListener("click", (e) => e.stopPropagation());
     ddT?.querySelector(".filter-dd__panel")?.addEventListener("click", (e) => e.stopPropagation());
@@ -187,16 +212,19 @@ function init() {
     initDropdowns();
     renderStatusCheckboxes();
 
+    // sobald Daten geladen -> Teilnehmer/Tags reinrendern
     eventModel.addEventListener("dataLoaded", () => {
         renderParticipantCheckboxes();
         renderTagCheckboxes();
     });
 
-    eventModel.addEventListener("participantAdded", () => renderParticipantCheckboxes());
-    eventModel.addEventListener("tagAdded", () => renderTagCheckboxes());
-    eventModel.addEventListener("tagRemoved", () => renderTagCheckboxes());
+    // live updates
+    eventModel.addEventListener("participantAdded", renderParticipantCheckboxes);
+    eventModel.addEventListener("tagAdded", renderTagCheckboxes);
+    eventModel.addEventListener("tagRemoved", renderTagCheckboxes);
 
     document.getElementById("btn-apply-filter")?.addEventListener("click", applyFilters);
+
     updateLabels();
 }
 

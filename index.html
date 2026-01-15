@@ -34,35 +34,76 @@
     <!-- === Hauptinhalt === -->
     <main class="main">
         <!-- === Filterleiste === -->
-        <section id="filter-section">
-            <h2>Filter</h2>
+        <section id="filter-section" class="filter-card" aria-label="Filter">
+            <h2 class="filter-card__title">Filter</h2>
 
-            <div class="filter-dd" id="dd-status">
-                <button type="button" class="filter-dd__btn" aria-expanded="false">
-                    Status <span class="filter-dd__value" id="filter-status-value">Alle</span>
-                    <span class="filter-dd__chev">▾</span>
-                </button>
-                <div class="filter-dd__panel" id="filter-statuses"></div>
+            <div class="filter-grid">
+                <!-- Status -->
+                <div class="filter-field" id="dd-status">
+                    <label class="filter-label" for="filter-status-btn">Status:</label>
+
+                    <div class="filter-dd">
+                        <button
+                                id="filter-status-btn"
+                                type="button"
+                                class="filter-dd__btn"
+                                aria-expanded="false"
+                                aria-controls="filter-statuses"
+                        >
+                            <span class="filter-dd__value" id="filter-status-value">Alle</span>
+                            <span class="filter-dd__chev" aria-hidden="true">▾</span>
+                        </button>
+
+                        <div class="filter-dd__panel" id="filter-statuses" role="listbox"></div>
+                    </div>
+                </div>
+
+                <!-- Teilnehmer -->
+                <div class="filter-field" id="dd-participants">
+                    <label class="filter-label" for="filter-participants-btn">Teilnehmer:</label>
+
+                    <div class="filter-dd">
+                        <button
+                                id="filter-participants-btn"
+                                type="button"
+                                class="filter-dd__btn"
+                                aria-expanded="false"
+                                aria-controls="filter-participants"
+                        >
+                            <span class="filter-dd__value" id="filter-participants-value">Alle</span>
+                            <span class="filter-dd__chev" aria-hidden="true">▾</span>
+                        </button>
+
+                        <div class="filter-dd__panel" id="filter-participants" role="listbox"></div>
+                    </div>
+                </div>
+
+                <!-- Tags -->
+                <div class="filter-field" id="dd-tags">
+                    <label class="filter-label" for="filter-tags-btn">Tags:</label>
+
+                    <div class="filter-dd">
+                        <button
+                                id="filter-tags-btn"
+                                type="button"
+                                class="filter-dd__btn"
+                                aria-expanded="false"
+                                aria-controls="filter-tags"
+                        >
+                            <span class="filter-dd__value" id="filter-tags-value">Alle</span>
+                            <span class="filter-dd__chev" aria-hidden="true">▾</span>
+                        </button>
+
+                        <div class="filter-dd__panel" id="filter-tags" role="listbox"></div>
+                    </div>
+                </div>
             </div>
 
-            <div class="filter-dd" id="dd-participants">
-                <button type="button" class="filter-dd__btn" aria-expanded="false">
-                    Teilnehmer <span class="filter-dd__value" id="filter-participants-value">Alle</span>
-                    <span class="filter-dd__chev">▾</span>
-                </button>
-                <div class="filter-dd__panel" id="filter-participants"></div>
+            <div class="filter-actions">
+                <button id="btn-apply-filter" class="btn-filter" type="button">Filtern</button>
             </div>
-
-            <div class="filter-dd" id="dd-tags">
-                <button type="button" class="filter-dd__btn" aria-expanded="false">
-                    Tags <span class="filter-dd__value" id="filter-tags-value">Alle</span>
-                    <span class="filter-dd__chev">▾</span>
-                </button>
-                <div class="filter-dd__panel" id="filter-tags"></div>
-            </div>
-
-            <button id="btn-apply-filter">Filtern</button>
         </section>
+
 
         <danger-banner></danger-banner>
 

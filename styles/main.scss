@@ -11,6 +11,21 @@
 @use "tags";
 @use "danger";
 
+/* === Main Layout === */
+.main {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+#filter-section,
+#event-list-section {
+  width: 100%;
+}
+
+
 /* styling für bilder */
 .event-list__item {
   display: flex;
@@ -25,4 +40,3 @@
   border-radius: 10px;
   border: 1px solid var(--border);
 }
-

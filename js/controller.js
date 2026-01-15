@@ -8,12 +8,14 @@ export class Controller {
         this.list = null;
         this.form = null;
         this.detail = null;
+        this.filterSection = null;
     }
 
     init() {
         console.log("🎮 Controller initialisiert");
 
-        // === DOM erst JETZT holen (wichtig!) ===
+        this.filterSection = document.getElementById("filter-section");
+
         this.sections = {
             list: document.getElementById("event-list-section"),
             form: document.getElementById("event-form-section"),
@@ -23,23 +25,22 @@ export class Controller {
         };
 
         this.danger = document.querySelector("danger-banner");
-
         this.list = document.querySelector("event-list");
         this.form = document.querySelector("event-form");
         this.detail = document.querySelector("event-detail");
 
-        // === Startansicht ===
+        // Startansicht
         this.showSection("list");
         this.setActiveButton("btn-all-events");
 
-        // === Sidebar Buttons ===
+        // Sidebar Buttons
         document.getElementById("btn-all-events")?.addEventListener("click", () => {
             this.showSection("list");
             this.setActiveButton("btn-all-events");
         });
 
         document.getElementById("btn-new-event")?.addEventListener("click", () => {
-            if (this.form) this.form.event = null; // leeres Formular
+            if (this.form) this.form.event = null;
             this.showSection("form");
             this.setActiveButton("btn-new-event");
         });
@@ -54,56 +55,54 @@ export class Controller {
             this.setActiveButton("btn-manage-tags");
         });
 
-        // === Event-Liste → Detail ===
-        // Unterstützt BEIDES:
-        // - Übungsstyle: e.detail = ID
-        // - Dein alter style: e.detail = Event-Objekt
+        // Event-Liste → Detail
         this.list?.addEventListener("show-event-detail", (e) => {
             const payload = e.detail;
-            const id = (payload && typeof payload === "object") ? payload.id : payload;
+            const id = payload && typeof payload === "object" ? payload.id : payload;
 
             if (typeof eventModel.changeEvent === "function") {
-                eventModel.changeEvent(id); // Übungsstyle
+                eventModel.changeEvent(id);
             } else {
-                // fallback, falls du noch old-style Model hast
-                eventModel.currentEvent = (payload && typeof payload === "object")
-                    ? payload
-                    : eventModel.events.find(x => x.id === id);
+                eventModel.currentEvent =
+                    payload && typeof payload === "object"
+                        ? payload
+                        : eventModel.events.find((x) => x.id === id);
             }
 
             this.showSection("detail");
             this.setActiveButton("btn-all-events");
         });
 
-        // === Event-Liste → Bearbeiten ===
+        // Event-Liste → Bearbeiten
         this.list?.addEventListener("edit-event", (e) => {
             const payload = e.detail;
-            const id = (payload && typeof payload === "object") ? payload.id : payload;
+            const id = payload && typeof payload === "object" ? payload.id : payload;
 
-            const ev = (typeof eventModel.getEventById === "function")
-                ? eventModel.getEventById(id)         // Übungsstyle
-                : (payload && typeof payload === "object"
-                    ? payload
-                    : eventModel.events.find(x => x.id === id));
+            const ev =
+                typeof eventModel.getEventById === "function"
+                    ? eventModel.getEventById(id)
+                    : payload && typeof payload === "object"
+                        ? payload
+                        : eventModel.events.find((x) => x.id === id);
 
             if (this.form) this.form.event = ev;
             this.showSection("form");
             this.setActiveButton("btn-new-event");
         });
 
-        // === Event-Liste → Löschen ===
+        // Event-Liste → Löschen
         this.list?.addEventListener("delete-event", (e) => {
-            const idToDelete = e.detail;
-            this.confirmDeleteEvent(idToDelete);
+            this.confirmDeleteEvent(e.detail);
         });
 
-        // === Formular → Speichern ===
+        // Formular → Speichern
         this.form?.addEventListener("save-event", (e) => {
             const ev = e.detail;
 
-            const exists = (typeof eventModel.getEventById === "function")
-                ? !!eventModel.getEventById(ev.id)
-                : (eventModel.events || []).some(x => x.id === ev.id);
+            const exists =
+                typeof eventModel.getEventById === "function"
+                    ? !!eventModel.getEventById(ev.id)
+                    : (eventModel.events || []).some((x) => x.id === ev.id);
 
             if (exists) eventModel.updateEvent(ev);
             else eventModel.addEvent(ev);
@@ -112,27 +111,25 @@ export class Controller {
             this.setActiveButton("btn-all-events");
         });
 
-        // === Formular → Abbrechen ===
+        // Formular → Abbrechen
         this.form?.addEventListener("cancel-event-form", () => {
             this.showSection("list");
             this.setActiveButton("btn-all-events");
         });
 
-        // === Detailansicht → Bearbeiten ===
+        // Detail → Bearbeiten
         this.detail?.addEventListener("edit-current-event", (e) => {
             if (this.form) this.form.event = e.detail;
             this.showSection("form");
             this.setActiveButton("btn-new-event");
         });
 
-        // === Detailansicht → Löschen ===
+        // Detail → Löschen
         this.detail?.addEventListener("delete-current-event", (e) => {
-            const idToDelete = e.detail;
-            this.confirmDeleteEvent(idToDelete);
+            this.confirmDeleteEvent(e.detail);
         });
     }
 
-    // === Zentrale Delete-Confirmation ===
     confirmDeleteEvent(idToDelete) {
         const danger = this.danger || document.querySelector("danger-banner");
 
@@ -159,15 +156,19 @@ export class Controller {
         danger.show();
     }
 
-    // === Ansicht wechseln ===
+    // ✅ Ansicht wechseln + Filter sichtbar nur bei Liste
     showSection(name) {
         Object.values(this.sections).forEach((section) => section?.classList.add("hidden"));
         this.sections[name]?.classList.remove("hidden");
+
+        if (this.filterSection) {
+            if (name === "list") this.filterSection.classList.remove("hidden");
+            else this.filterSection.classList.add("hidden");
+        }
     }
 
-    // === Aktiven Sidebar-Button markieren ===
     setActiveButton(activeId) {
-        document.querySelectorAll(".sidebar__btn").forEach(btn =>
+        document.querySelectorAll(".sidebar__btn").forEach((btn) =>
             btn.classList.remove("sidebar__btn--active")
         );
         document.getElementById(activeId)?.classList.add("sidebar__btn--active");

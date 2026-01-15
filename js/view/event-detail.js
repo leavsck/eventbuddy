@@ -43,10 +43,6 @@ class EventDetail extends HTMLElement {
       <link rel="stylesheet" href="styles/main.css">
 
       <section class="detail-wrap">
-        <div class="detail-header">
-          <div class="detail-brand">EventBuddy</div>
-        </div>
-
         <div class="detail-card">
           <h2 class="detail-title">Event-Detailansicht: ${ev.title}</h2>
 
