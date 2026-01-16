@@ -113,10 +113,19 @@ class TagList extends HTMLElement {
         const name = (input?.value || "").trim();
         if (!name) return;
 
-        eventModel.addTag(new Tag({ id: Date.now(), name }));
+        const success = eventModel.addTag(new Tag({ id: Date.now(), name }));
+
+        if (!success) {
+            alert(`Tag „${name}“ existiert bereits. Bitte wähle einen anderen Namen.`);
+            input?.focus();
+            input?.select?.();
+            return;
+        }
+
         e.target.reset();
         input?.focus();
     }
+
 }
 
 customElements.define("tag-list", TagList);

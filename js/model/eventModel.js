@@ -73,9 +73,29 @@ export class EventModel extends EventTarget {
     }
 
     addTag(tag) {
+        // 1) Name normalisieren (Trim + lowercase)
+        const newName = (tag?.name || "").trim();
+        const normNew = newName.toLowerCase();
+
+        if (!newName) return false;
+
+        // 2) Prüfen ob schon vorhanden
+        const exists = this.#tags.some(t =>
+            (t?.name || "").trim().toLowerCase() === normNew
+        );
+
+        if (exists) {
+            // Event dispatchen, damit UI reagieren kann
+            this.dispatchEvent(new CustomEvent("tagDuplicate", { detail: newName }));
+            return false;
+        }
+
+        // 3) Falls nicht vorhanden -> hinzufügen
         this.#tags.push(tag);
         this.dispatchEvent(new CustomEvent("tagAdded", { detail: tag }));
+        return true;
     }
+
 
     canDeleteTag(tagId) {
         const idStr = String(tagId);
