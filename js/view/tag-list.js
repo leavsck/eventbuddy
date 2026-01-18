@@ -27,12 +27,12 @@ class TagList extends HTMLElement {
         eventModel.removeEventListener("dataLoaded", this.onData);
         eventModel.removeEventListener("tagAdded", this.onData);
         eventModel.removeEventListener("tagRemoved", this.onData);
-        eventModel.removeEventListener("eventAdded", this.onData);
-        eventModel.removeEventListener("eventDeleted", this.onData);
-        eventModel.removeEventListener("eventUpdated", this.onData);
 
-        this.shadowRoot.querySelector("#tag-form")?.removeEventListener("submit", this.onSubmit);
+        this.shadowRoot
+            .querySelector("#tag-form")
+            ?.removeEventListener("submit", this.onSubmit);
     }
+
 
     onData() {
         this.renderList();
@@ -64,7 +64,6 @@ class TagList extends HTMLElement {
     `;
 
         this.renderList();
-        this.shadowRoot.querySelector("#tag-form")?.addEventListener("submit", this.onSubmit);
     }
 
     renderList() {

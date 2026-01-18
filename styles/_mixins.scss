@@ -6,7 +6,7 @@
 
 @mixin ring($color) {
   outline: none;
-  box-shadow: 0 0 0 3px rgba($color, .35);
+  box-shadow: 0 0 0 3px rgba($color, 0.35);
 }
 
 @mixin truncate {
@@ -15,7 +15,7 @@
   text-overflow: ellipsis;
 }
 
-// Breakpoints nach Angabe
+/* Breakpoints nach Angabe */
 $bp-desktop: 768px; // Desktop: >= 768
 $bp-tablet:  767px; // Tablet:  <= 767
 $bp-mobile:  576px; // Mobile:  <= 576
@@ -31,4 +31,3 @@ $bp-mobile:  576px; // Mobile:  <= 576
 @mixin mobile {
   @media (max-width: $bp-mobile) { @content; }
 }
-

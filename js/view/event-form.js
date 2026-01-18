@@ -12,9 +12,6 @@ class EventForm extends HTMLElement {
     connectedCallback() {
         this.render();
         eventModel.addEventListener("dataLoaded", this._rerender);
-        eventModel.addEventListener("tagAdded", this._rerender);
-        eventModel.addEventListener("tagRemoved", this._rerender);
-        eventModel.addEventListener("participantAdded", this._rerender);
     }
 
     set event(ev) {

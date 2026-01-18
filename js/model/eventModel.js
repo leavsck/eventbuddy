@@ -40,7 +40,6 @@ export class EventModel extends EventTarget {
     // CRUD -> immer auch "eventsChanged" dispatchen (ein zentrales Update)
     addEvent(ev) {
         this.#events.set(Number(ev.id), ev);
-        this.dispatchEvent(new CustomEvent("eventAdded", { detail: ev }));
         this.dispatchEvent(new CustomEvent("eventsChanged"));
     }
 

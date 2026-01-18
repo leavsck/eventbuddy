@@ -6,11 +6,14 @@
   opacity: 0.85;
 }
 
-/* keine Punkte in der Teilnehmerliste, wegen ul aus html eig da */
+/* Teilnehmer-Liste */
 .participant-items {
   list-style: none;
-  padding-left: 0;
+  padding: 0;
   margin: 0;
+
+  display: grid;
+  gap: 10px;
 }
 
 .participant-item {
@@ -37,14 +40,4 @@
 .participant-empty {
   opacity: 0.7;
   font-style: italic;
-}
-
-/* Teilnehmer-Liste */
-.participant-items {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-
-  display: grid;
-  gap: 10px; // abstand zwischen boxen
 }

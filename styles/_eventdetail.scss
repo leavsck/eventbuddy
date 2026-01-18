@@ -2,6 +2,9 @@
 
 .detail-wrap {
   padding: 24px;
+
+  @include tablet { padding: 16px; }
+  @include mobile { padding: 12px; }
 }
 
 .detail-card {
@@ -12,6 +15,12 @@
   padding: 22px 26px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.20);
   max-width: 900px;
+  width: 100%;
+
+  @include mobile {
+    padding: 16px 16px;
+    border-radius: 12px;
+  }
 }
 
 .detail-title {
@@ -20,12 +29,6 @@
   font-weight: 700;
 }
 
-.detail-card {
-  max-width: 900px;
-  width: 100%;
-}
-
-/* responsive */
 .detail-grid {
   display: grid;
   grid-template-columns: 1fr 0.9fr;
@@ -36,18 +39,6 @@
     gap: 18px;
   }
 }
-
-.detail-actions {
-  display: flex;
-  gap: 10px;
-  margin-top: 18px;
-
-  @include mobile {
-    flex-wrap: wrap;
-    button, .btn { width: 100%; }
-  }
-}
-
 
 .detail-row {
   margin-bottom: 14px;
@@ -112,6 +103,14 @@
   display: flex;
   gap: 10px;
   margin-top: 18px;
+
+  @include mobile {
+    flex-wrap: wrap;
+
+    .btn {
+      width: 100%;
+    }
+  }
 }
 
 .detail-empty {

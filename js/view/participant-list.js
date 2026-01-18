@@ -61,9 +61,6 @@ class ParticipantList extends HTMLElement {
     `;
 
         this.renderList();
-
-        // nach innerHTML neu setzen -> listener wieder setzen
-        this.shadowRoot.querySelector("#participant-form")?.addEventListener("submit", this.onSubmit);
     }
 
     renderList() {

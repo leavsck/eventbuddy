@@ -11,15 +11,19 @@ body {
   color: var(--fg);
 }
 
+.hidden {
+  display: none;
+}
+
+/* Grundlayout: Mobile/Tablet = untereinander, Desktop = 2 Spalten */
 .layout {
   display: grid;
   gap: 16px;
   padding: 16px;
 
-  // Mobile/Tablet: untereinander (Sidebar oben, Content unten)
   grid-template-columns: 1fr;
   grid-template-rows: auto 1fr;
-  min-height: 100vh; // statt height: 100vh
+  min-height: 100vh;
 
   @include desktop {
     grid-template-columns: 300px 1fr;
@@ -27,63 +31,7 @@ body {
   }
 }
 
-// main padding kleiner auf mobile
-.main {
-  width: 100%;
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 24px;
-  box-sizing: border-box;
-
-  @include tablet { padding: 16px; }
-  @include mobile { padding: 12px; }
-}
-
-
-.hidden {
-  display: none;
-}
-
-.icon-btn {
-  background: transparent;
-  border: 0;
-  font-size: 20px;
-  cursor: pointer;
-  color: var(--fg);
-}
-
-/* Filter Section */
-#filter-section {
-  @include card;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  padding: 12px 16px;
-  align-items: center;
-
-  select,
-  button {
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 6px 8px;
-    background: var(--bg-elev);
-    color: inherit;
-  }
-
-  button {
-    background: var(--primary);
-    color: #fff;
-    border: none;
-    font-weight: 600;
-    cursor: pointer;
-
-    &:hover {
-      filter: brightness(0.95);
-    }
-  }
-}
-
-/* Scrollbars  */
+/* Scrollbars */
 .messages::-webkit-scrollbar,
 .event-list::-webkit-scrollbar {
   width: 8px;
