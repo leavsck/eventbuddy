@@ -14,14 +14,31 @@ body {
 .layout {
   display: grid;
   gap: 16px;
-  height: 100vh;
   padding: 16px;
 
-  /* damit es responsive ist */
-  @media (min-width: 768px) {
+  // Mobile/Tablet: untereinander (Sidebar oben, Content unten)
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr;
+  min-height: 100vh; // statt height: 100vh
+
+  @include desktop {
     grid-template-columns: 300px 1fr;
+    grid-template-rows: 1fr;
   }
 }
+
+// main padding kleiner auf mobile
+.main {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px;
+  box-sizing: border-box;
+
+  @include tablet { padding: 16px; }
+  @include mobile { padding: 12px; }
+}
+
 
 .hidden {
   display: none;

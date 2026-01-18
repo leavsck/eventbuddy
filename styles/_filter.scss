@@ -130,7 +130,7 @@
 }
 
 /* Responsive */
-@media (max-width: 900px) {
+@include tablet {
   .filter-card .filter-grid {
     grid-template-columns: 1fr;
   }
@@ -143,3 +143,16 @@
     width: 100%;
   }
 }
+
+@include mobile {
+  .filter-card {
+    padding: 16px;
+    border-radius: 14px;
+  }
+
+  .filter-card .filter-dd__btn,
+  .filter-card .btn-filter {
+    height: 44px;
+  }
+}
+

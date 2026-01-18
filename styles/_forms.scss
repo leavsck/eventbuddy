@@ -23,10 +23,37 @@
   font-weight: 700;
 }
 
+.form-card {
+  max-width: 900px;
+  width: 100%;
+
+  @include tablet {
+    padding: 18px 18px;
+  }
+
+  @include mobile {
+    padding: 14px 14px;
+    border-radius: 12px;
+  }
+}
+
+/*responsive*/
 .form-grid {
   display: grid;
   gap: 14px;
+
+  @include desktop {
+    grid-template-columns: 1fr 1fr;
+  }
 }
+
+// Optional: Felder die “breit” sein sollen
+.form-field--full {
+  @include desktop {
+    grid-column: 1 / -1;
+  }
+}
+
 
 .form-field {
   display: grid;

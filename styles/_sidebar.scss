@@ -1,25 +1,49 @@
 @use "mixins" as *;
 
+/* === Sidebar Container === */
 .sidebar {
   @include card;
   display: flex;
   flex-direction: column;
   min-height: 0;
+
+  /* Tablet & Mobile: Sidebar oben fixiert */
+  @include tablet {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+  }
 }
 
+/* === Sidebar Header === */
 .sidebar__header {
   padding: 16px;
   border-bottom: 1px solid var(--border);
   font-weight: 600;
 }
 
+/* === Navigation === */
 .sidebar__nav {
   display: flex;
   flex-direction: column;
   gap: 12px;
   padding: 16px;
+  flex: 1;
+
+  /* Tablet: Buttons nebeneinander, umbrechend */
+  @include tablet {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  /* Mobile: etwas kompakter */
+  @include mobile {
+    gap: 8px;
+  }
 }
 
+/* === Sidebar Buttons === */
 .sidebar__btn {
   background: var(--primary);
   color: white;
@@ -28,61 +52,36 @@
   padding: 10px 12px;
   font-weight: 600;
   cursor: pointer;
+  text-align: center;
 
   &:hover {
     filter: brightness(0.95);
   }
+
+  /* Tablet: Buttons dürfen umbrechen */
+  @include tablet {
+    flex: 1 1 220px;
+  }
+
+  /* Mobile: 2 Buttons pro Reihe */
+  @include mobile {
+    flex: 1 1 calc(50% - 8px);
+    padding: 10px 10px;
+    border-radius: 10px;
+  }
 }
 
-/* Aktiver Sidebar Button */
+/* === Aktiver Button === */
 .sidebar__btn--active {
   filter: brightness(0.8);
   transform: scale(0.98);
 }
 
-.sidebar {
-  @include card;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-
-.sidebar__header {
-  padding: 16px;
-  border-bottom: 1px solid var(--border);
-  font-weight: 600;
-}
-
-.sidebar__nav {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 16px;
-  flex: 1;
-}
-
+/* === Spacer (nur Desktop sinnvoll) === */
 .sidebar__spacer {
   flex: 1;
-}
 
-/* Standard Buttons */
-.sidebar__btn {
-  background: var(--primary);
-  color: white;
-  border: 0;
-  border-radius: 12px;
-  padding: 10px 12px;
-  font-weight: 600;
-  cursor: pointer;
-
-  &:hover {
-    filter: brightness(0.95);
+  @include tablet {
+    display: none;
   }
 }
-
-/* Aktiver Sidebar Button */
-.sidebar__btn--active {
-  filter: brightness(0.8);
-  transform: scale(0.98);
-}
-
