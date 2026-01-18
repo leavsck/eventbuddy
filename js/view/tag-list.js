@@ -13,26 +13,30 @@ class TagList extends HTMLElement {
     connectedCallback() {
         this.render();
 
+        // Daten/Tags Updates
         eventModel.addEventListener("dataLoaded", this.onData);
         eventModel.addEventListener("tagAdded", this.onData);
         eventModel.addEventListener("tagRemoved", this.onData);
-        eventModel.addEventListener("eventAdded", this.onData);
-        eventModel.addEventListener("eventDeleted", this.onData);
-        eventModel.addEventListener("eventUpdated", this.onData);
 
-        this.shadowRoot.querySelector("#tag-form")?.addEventListener("submit", this.onSubmit);
+        // Events ändern sich -> wichtig für "Tag in use?"
+        eventModel.addEventListener("eventsChanged", this.onData);
+
+        // Form submit
+        this.shadowRoot
+            .querySelector("#tag-form")
+            ?.addEventListener("submit", this.onSubmit);
     }
 
     disconnectedCallback() {
         eventModel.removeEventListener("dataLoaded", this.onData);
         eventModel.removeEventListener("tagAdded", this.onData);
         eventModel.removeEventListener("tagRemoved", this.onData);
+        eventModel.removeEventListener("eventsChanged", this.onData);
 
         this.shadowRoot
             .querySelector("#tag-form")
             ?.removeEventListener("submit", this.onSubmit);
     }
-
 
     onData() {
         this.renderList();
@@ -72,7 +76,16 @@ class TagList extends HTMLElement {
 
         list.innerHTML = "";
 
-        for (const t of (eventModel.tags || [])) {
+        const tags = eventModel.tags || [];
+        if (!tags.length) {
+            const empty = document.createElement("div");
+            empty.className = "participant-empty";
+            empty.textContent = "Noch keine Tags vorhanden.";
+            list.appendChild(empty);
+            return;
+        }
+
+        for (const t of tags) {
             const li = document.createElement("li");
             li.className = "tag-item";
 
@@ -80,13 +93,10 @@ class TagList extends HTMLElement {
 
             li.innerHTML = `
         <span class="tag-name">${t.name}</span>
-        <button class="tag-delete" type="button" title="Löschen">
-          🗑️
-        </button>
+        <button class="tag-delete" type="button" title="Löschen">🗑️</button>
       `;
 
             li.querySelector(".tag-delete")?.addEventListener("click", () => {
-                // IMMER Feedback geben:
                 if (inUse) {
                     alert(`„${t.name}“ kann nicht gelöscht werden, weil er noch einem Event zugeordnet ist.`);
                     return;
@@ -124,7 +134,6 @@ class TagList extends HTMLElement {
         e.target.reset();
         input?.focus();
     }
-
 }
 
 customElements.define("tag-list", TagList);
