@@ -39,12 +39,12 @@ class DangerBanner extends HTMLElement {
         this.shadowRoot.getElementById("btn-cancel")?.addEventListener("click", () => {
             this.hide();
         });
-
+// bestätigen-button → gespeicherte confirm-funktion ausführen
         this.shadowRoot.getElementById("btn-confirm")?.addEventListener("click", () => {
             if (typeof this.#confirmFn === "function") this.#confirmFn();
         });
     }
-
+    // setzt titel, beschreibung und button-text
     setContent({ title, desc, confirmLabel } = {}) {
         const titleEl = this.shadowRoot.getElementById("danger-title");
         const descEl = this.shadowRoot.getElementById("danger-desc");
@@ -59,6 +59,7 @@ class DangerBanner extends HTMLElement {
         this.#confirmFn = fn;
     }
 
+    // zeigt den banner an (per css animation)
     show() {
         this.classList.add("is-visible");
     }

@@ -11,13 +11,13 @@ export class Controller {
         this.form = null;
         this.detail = null;
     }
-
+        //wird eig so gut wie immer aufgerufen wenn benutzer interagiert
     init() {
         console.log("🎮 Controller initialisiert");
 
         // sections
         this.filterSection = document.getElementById("filter-section");
-
+        //ruft er alle aus view auf
         this.sections = {
             list: document.getElementById("event-list-section"),
             form: document.getElementById("event-form-section"),
@@ -35,20 +35,21 @@ export class Controller {
         // start views
         this.go("list", "btn-all-events");
 
-        // sidebar navigatin
+        // sidebar navigation
+        //aktiviert nur sicht bei all events
         document.getElementById("btn-all-events")?.addEventListener("click", () => {
             this.go("list", "btn-all-events");
         });
-
+        // neues event erstellen
         document.getElementById("btn-new-event")?.addEventListener("click", () => {
             if (this.form) this.form.event = null;
             this.go("form", "btn-new-event");
         });
-
+        // neuen teilnehmer anlegen
         document.getElementById("btn-new-participant")?.addEventListener("click", () => {
             this.go("participants", "btn-new-participant");
         });
-
+        // tagverwaltung
         document.getElementById("btn-manage-tags")?.addEventListener("click", () => {
             this.go("tags", "btn-manage-tags");
         });
@@ -64,7 +65,7 @@ export class Controller {
             } else {
                 eventModel.currentEvent = this.getEventByIdSafe(id);
             }
-
+            //ruft in view detail auf und wird geöffnet
             this.go("detail", "btn-all-events");
         });
 
@@ -95,11 +96,12 @@ export class Controller {
             const ev = e.detail;
             if (!ev || !ev.id) return;
 
+            //true event gibt es schon, false noch nicht
             const exists =
                 typeof eventModel.getEventById === "function"
                     ? !!eventModel.getEventById(ev.id)
                     : (eventModel.events || []).some((x) => x.id === ev.id);
-
+                // wenn es schon gibt dann geupdatet sonst neues zu liste hinzufügen
             if (exists) eventModel.updateEvent(ev);
             else eventModel.addEvent(ev);
 
@@ -108,6 +110,7 @@ export class Controller {
 
         // formular speichern
         this.form?.addEventListener("cancel-event-form", () => {
+            // wird in view zu webcomponent dazugefügt
             this.go("list", "btn-all-events");
         });
 
@@ -121,15 +124,16 @@ export class Controller {
         this.detail?.addEventListener("delete-current-event", (e) => {
             const id = this.getIdFromDetail(e.detail);
             if (!id) return;
+            //fehlermeldung wird aufgerufen
             this.confirmDeleteEvent(id);
         });
     }
-
+     // wenn bei einer section der button aktiv ist wird nur die eine section ausgeblendet udn die anderen weg
     go(sectionName, activeBtnId) {
         this.showSection(sectionName);
         if (activeBtnId) this.setActiveButton(activeBtnId);
     }
-
+      // das die anderen ausgeblendet werden
     showSection(name) {
         Object.values(this.sections).forEach((section) =>
             section?.classList.add("hidden")
@@ -141,14 +145,14 @@ export class Controller {
             this.filterSection.classList.toggle("hidden", name !== "list");
         }
     }
-
+   // bei klick auf button ruft active button auf
     setActiveButton(activeId) {
         document
             .querySelectorAll(".sidebar__btn")
             .forEach((btn) => btn.classList.remove("sidebar__btn--active"));
         document.getElementById(activeId)?.classList.add("sidebar__btn--active");
     }
-
+        // ids können unterschiedlich werden so wird alles genommen um event zu dispatchen
     getIdFromDetail(detail) {
         if (!detail) return null;
         if (typeof detail === "string" || typeof detail === "number") return detail;
@@ -156,6 +160,7 @@ export class Controller {
         return null;
     }
 
+        //holt event by id aber safe also egal wie es aussieht und wenn er es nicht findet sucht er selbst im event array
     getEventByIdSafe(id) {
         if (typeof eventModel.getEventById === "function") return eventModel.getEventById(id);
         return (eventModel.events || []).find((x) => x.id === id) || null;

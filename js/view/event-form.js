@@ -3,6 +3,7 @@ import Event from "../model/event.js";
 
 class EventForm extends HTMLElement {
     #event;
+    //hält event
     constructor() {
         super();
         this.attachShadow({ mode: "open" });
@@ -21,14 +22,14 @@ class EventForm extends HTMLElement {
 
     render() {
         const ev = this.#event || {};
-
+        //falls kein event da isz neues event
         const selectedTagIds = (ev.tags || []).map(t => String(t.id));
         const selectedParticipantIds = (ev.participants || []).map(p => String(p.id));
-
+        //tag multi select
         const tagOptions = (eventModel.tags || [])
             .map(t => `<option value="${t.id}" ${selectedTagIds.includes(String(t.id)) ? "selected" : ""}>${t.name}</option>`)
             .join("");
-
+        //tag multi select
         const participantOptions = (eventModel.participants || [])
             .map(p => `<option value="${p.id}" ${selectedParticipantIds.includes(String(p.id)) ? "selected" : ""}>${p.name} (${p.email})</option>`)
             .join("");
@@ -96,11 +97,11 @@ class EventForm extends HTMLElement {
         </form>
       </section>
     `;
-
+        //abbrechen button
         this.shadowRoot.querySelector("#btn-cancel")?.addEventListener("click", () => {
             this.dispatchEvent(new CustomEvent("cancel-event-form", { bubbles: true, composed: true }));
         });
-
+        //form absenden
         this.shadowRoot.querySelector("#event-form")?.addEventListener("submit", (e) => {
             e.preventDefault();
 

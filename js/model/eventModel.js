@@ -36,22 +36,23 @@ export class EventModel extends EventTarget {
         return this.#events.get(Number(id));
     }
 
-    // currentEvent setzen + Event dispatchen
+    // currentEvent setzen + Event dispatchen (event aktiv auslösen)
     changeEvent(newEventId) {
         const ev = this.getEventById(newEventId);
         this.#currentEvent = ev;
         this.dispatchEvent(new CustomEvent("eventSelected", { detail: ev }));
         return ev;
     }
-
+        // hinzufügen
     addEvent(ev) {
         this.#events.set(Number(ev.id), ev);
-
+        // model sagt es hat sich ein event geändert
         this.dispatchEvent(new CustomEvent("eventsChanged"));
     }
-
+        //updaten
     updateEvent(updatedEvent) {
         const id = Number(updatedEvent.id);
+        //qird nochmal überprüft ob es das eh gibt in map wegen #
         if (!this.#events.has(id)) return;
 
         this.#events.set(id, updatedEvent);
@@ -67,7 +68,7 @@ export class EventModel extends EventTarget {
         this.dispatchEvent(new CustomEvent("eventUpdated", { detail: updatedEvent }));
         this.dispatchEvent(new CustomEvent("eventsChanged"));
     }
-
+        //löschen eines events
     deleteEvent(id) {
         const numId = Number(id);
         this.#events.delete(numId);
@@ -97,12 +98,12 @@ export class EventModel extends EventTarget {
             this.dispatchEvent(new CustomEvent("tagDuplicate", { detail: newName }));
             return false;
         }
-
+        // tag in tagliste hinzufügen
         this.#tags.push(tag);
         this.dispatchEvent(new CustomEvent("tagAdded", { detail: tag }));
         return true;
     }
-
+        // ob es üpberhaupt möglich ist einen tag zu löschen
     canDeleteTag(tagId) {
         const idStr = String(tagId);
 
@@ -151,46 +152,67 @@ export class EventModel extends EventTarget {
     addParticipant(participant) {
         this.#participants.push(participant);
         this.dispatchEvent(new CustomEvent("participantAdded", { detail: participant }));
-        // optional: this.dispatchEvent(new CustomEvent("eventsChanged"));
     }
 
-    // daten aus json laden
+    // Lädt die initialen Daten (Events, Teilnehmer, Tags) aus JSON-Dateien
+// und baut daraus die internen Model-Strukturen auf
     async #loadFromJSON() {
         try {
+            // Promise.all lädt alle drei JSON-Dateien parallel (gleichzeitig)
+            // fetch() holt die Datei, r.json() wandelt sie in JS-Objekte um
             const [eventsData, participantsData, tagsData] = await Promise.all([
                 fetch("json/events.json").then((r) => r.json()),
                 fetch("json/participants.json").then((r) => r.json()),
                 fetch("json/tags.json").then((r) => r.json()),
             ]);
 
+            // Teilnehmer aus den Rohdaten erzeugen und als Participant-Objekte speichern
             this.#participants = participantsData.map((p) => new Participant(p));
+
+            // Tags aus den Rohdaten erzeugen und als Tag-Objekte speichern
             this.#tags = tagsData.map((t) => new Tag(t));
 
+            // Events aus der JSON-Datei durchgehen
             for (const e of eventsData) {
+
+                // Teilnehmer-IDs aus dem Event werden auf echte Participant-Objekte gemappt
+                // Falls eine ID nicht gefunden wird, wird sie herausgefiltert
                 const participants = (e.participants || [])
                     .map((id) => this.#participants.find((p) => p.id === id))
                     .filter(Boolean);
 
+                // Tag-Namen aus dem Event werden auf echte Tag-Objekte gemappt
+                // Auch hier werden ungültige Referenzen entfernt
                 const tags = (e.tags || [])
                     .map((name) => this.#tags.find((t) => t.name === name))
                     .filter(Boolean);
 
+                // Neues Event-Objekt erstellen
+                // Spread-Operator kopiert alle Felder aus dem JSON-Event
+                // participants und tags werden durch die gemappten Objekte ersetzt
                 const ev = new Event({
-                    ...e,
-                    participants,
-                    tags,
-                    image: e.image || "",
+                    ...e, // kopiert alle ursprünglichen Event-Eigenschaften
+                    participants, // echte Participant-Objekte statt IDs
+                    tags, // echte Tag-Objekte statt Namen
+                    image: e.image || "", // Fallback, falls kein Bild vorhanden ist
                 });
 
+                // Event wird in der Map gespeichert (ID als Number für Konsistenz)
                 this.#events.set(Number(ev.id), ev);
             }
 
+            // Signalisiert: Alle Daten wurden erfolgreich geladen
             this.dispatchEvent(new CustomEvent("dataLoaded"));
+
+            // Signalisiert: Event-Daten haben sich geändert → Views können neu rendern
             this.dispatchEvent(new CustomEvent("eventsChanged"));
+
         } catch (err) {
+            // Fehlerbehandlung, falls das Laden oder Parsen der JSON-Dateien fehlschlägt
             console.error("Fehler beim Laden der JSON-Daten:", err);
         }
     }
+
 }
 
 export const eventModel = new EventModel();

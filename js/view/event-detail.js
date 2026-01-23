@@ -10,6 +10,7 @@ class EventDetail extends HTMLElement {
 
     connectedCallback() {
         this.render();
+        //reaktion auf eventmodel
         eventModel.addEventListener("eventSelected", this.onData);
         eventModel.addEventListener("eventUpdated", this.onData);
         eventModel.addEventListener("participantAdded", this.onData);
@@ -115,7 +116,7 @@ class EventDetail extends HTMLElement {
         </div>
       </section>
     `;
-
+        //klick auf event bearbeiten
         this.shadowRoot.querySelector(".btn-edit")?.addEventListener("click", () => {
             this.dispatchEvent(new CustomEvent("edit-current-event", { detail: ev, bubbles: true, composed: true }));
         });

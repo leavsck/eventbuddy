@@ -101,7 +101,7 @@ class TagList extends HTMLElement {
                     alert(`„${t.name}“ kann nicht gelöscht werden, weil er noch einem Event zugeordnet ist.`);
                     return;
                 }
-
+                // wenn tag ok also nicht verwendet kommmt fehlermeldung
                 const ok = window.confirm(`Tag „${t.name}“ wirklich endgültig löschen?`);
                 if (!ok) return;
 
@@ -110,11 +110,11 @@ class TagList extends HTMLElement {
                     alert("Tag konnte nicht gelöscht werden (wird noch verwendet).");
                 }
             });
-
+            // zu tag liste hinzufügen
             list.appendChild(li);
         }
     }
-
+        // überprüfung bei hinzufügen ob es den tag schon gibt
     onSubmit(e) {
         e.preventDefault();
 

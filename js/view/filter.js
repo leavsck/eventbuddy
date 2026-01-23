@@ -1,17 +1,20 @@
 import { eventModel } from "../model/eventModel.js";
 
+// lokaler filter-state (sets = keine doppelten werte + schnell prüfen)
 const state = {
     selectedParticipantIds: new Set(),
     selectedTagIds: new Set(),
     selectedStatuses: new Set(),
 };
 
+// dropdown auf/zu + aria für accessibility
 function setDdOpen(ddEl, open) {
     ddEl.classList.toggle("is-open", open);
     const btn = ddEl.querySelector(".filter-dd__btn");
     if (btn) btn.setAttribute("aria-expanded", open ? "true" : "false");
 }
 
+// labels oben im dropdown aktualisieren ("x ausgewählt" / "alle")
 function updateLabels() {
     const pVal = document.getElementById("filter-participants-value");
     const tVal = document.getElementById("filter-tags-value");
@@ -22,6 +25,7 @@ function updateLabels() {
     if (sVal) sVal.textContent = state.selectedStatuses.size ? `${state.selectedStatuses.size} ausgewählt` : "Alle";
 }
 
+// status-checkboxen rendern (fixe 2 status-werte)
 function renderStatusCheckboxes() {
     const box = document.getElementById("filter-statuses");
     if (!box) return;
@@ -31,6 +35,7 @@ function renderStatusCheckboxes() {
         { id: "abgeschlossen", label: "Abgeschlossen" },
     ];
 
+    // panel html bauen
     box.innerHTML = `
     <div class="filter-dd__panel-actions">
       <strong>Status</strong>
@@ -49,12 +54,14 @@ function renderStatusCheckboxes() {
         .join("")}
   `;
 
+    // reset setzt set leer + rendert neu
     box.querySelector("#s-reset")?.addEventListener("click", () => {
         state.selectedStatuses.clear();
         renderStatusCheckboxes();
         updateLabels();
     });
 
+    // bei checkbox change → set updaten
     box.querySelectorAll('input[type="checkbox"]').forEach((cb) => {
         cb.addEventListener("change", () => {
             const id = cb.value;
@@ -66,6 +73,7 @@ function renderStatusCheckboxes() {
     updateLabels();
 }
 
+// teilnehmer-checkboxen rendern (kommt aus eventModel)
 function renderParticipantCheckboxes() {
     const box = document.getElementById("filter-participants");
     if (!box) return;
@@ -90,12 +98,14 @@ function renderParticipantCheckboxes() {
         .join("")}
   `;
 
+    // reset
     box.querySelector("#p-reset")?.addEventListener("click", () => {
         state.selectedParticipantIds.clear();
         renderParticipantCheckboxes();
         updateLabels();
     });
 
+    // set updaten (ids als string, damit vergleiche sauber sind)
     box.querySelectorAll('input[type="checkbox"]').forEach((cb) => {
         cb.addEventListener("change", () => {
             const id = String(cb.value);
@@ -107,6 +117,7 @@ function renderParticipantCheckboxes() {
     updateLabels();
 }
 
+// tag-checkboxen rendern (kommt aus eventModel)
 function renderTagCheckboxes() {
     const box = document.getElementById("filter-tags");
     if (!box) return;
@@ -131,12 +142,14 @@ function renderTagCheckboxes() {
         .join("")}
   `;
 
+    // reset
     box.querySelector("#t-reset")?.addEventListener("click", () => {
         state.selectedTagIds.clear();
         renderTagCheckboxes();
         updateLabels();
     });
 
+    // set updaten
     box.querySelectorAll('input[type="checkbox"]').forEach((cb) => {
         cb.addEventListener("change", () => {
             const id = String(cb.value);
@@ -148,6 +161,7 @@ function renderTagCheckboxes() {
     updateLabels();
 }
 
+// feuert ein globales event, damit z.b. event-list neu filtert
 function applyFilters() {
     document.dispatchEvent(
         new CustomEvent("filtersChanged", {
@@ -160,6 +174,7 @@ function applyFilters() {
     );
 }
 
+// dropdowns öffnen/schließen + outside click handling
 function initDropdowns() {
     const wrapS = document.getElementById("dd-status");
     const wrapP = document.getElementById("dd-participants");
@@ -173,6 +188,7 @@ function initDropdowns() {
     const btnP = ddP?.querySelector(".filter-dd__btn");
     const btnT = ddT?.querySelector(".filter-dd__btn");
 
+    // toggle: eins auf, die anderen zu
     btnS?.addEventListener("click", (e) => {
         e.stopPropagation();
         ddS && setDdOpen(ddS, !ddS.classList.contains("is-open"));
@@ -194,34 +210,36 @@ function initDropdowns() {
         ddP && setDdOpen(ddP, false);
     });
 
-    // Klick außerhalb schließt alles
+    // klick außerhalb schließt alles
     document.addEventListener("click", () => {
         ddS && setDdOpen(ddS, false);
         ddP && setDdOpen(ddP, false);
         ddT && setDdOpen(ddT, false);
     });
 
-    // Klick im Panel soll NICHT schließen
+    // klick im panel soll nicht schließen
     ddS?.querySelector(".filter-dd__panel")?.addEventListener("click", (e) => e.stopPropagation());
     ddP?.querySelector(".filter-dd__panel")?.addEventListener("click", (e) => e.stopPropagation());
     ddT?.querySelector(".filter-dd__panel")?.addEventListener("click", (e) => e.stopPropagation());
 }
 
+// init baut alles auf + hängt listeners dran
 function init() {
     initDropdowns();
     renderStatusCheckboxes();
 
-    // sobald Daten geladen -> Teilnehmer/Tags reinrendern
+    // sobald daten geladen → teilnehmer & tags rendern
     eventModel.addEventListener("dataLoaded", () => {
         renderParticipantCheckboxes();
         renderTagCheckboxes();
     });
 
-    // live updates
+    // live updates, wenn neue teilnehmer/tags dazukommen oder gelöscht werden
     eventModel.addEventListener("participantAdded", renderParticipantCheckboxes);
     eventModel.addEventListener("tagAdded", renderTagCheckboxes);
     eventModel.addEventListener("tagRemoved", renderTagCheckboxes);
 
+    // apply button feuert filtersChanged
     document.getElementById("btn-apply-filter")?.addEventListener("click", applyFilters);
 
     updateLabels();
